@@ -1,10 +1,10 @@
 import { Module } from "@nestjs/common";
-import { JwtModule } from "@nestjs/jwt";
+import { AuthModule } from "../auth/auth.module";
 import { CompareController } from "./compare.controller";
 import { CompareService } from "./compare.service";
 
 @Module({
-  imports: [JwtModule],
+  imports: [AuthModule],
   controllers: [CompareController],
   providers: [CompareService],
 })

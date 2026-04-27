@@ -1,10 +1,10 @@
 import { Module } from "@nestjs/common";
-import { JwtModule } from "@nestjs/jwt";
+import { AuthModule } from "../auth/auth.module";
 import { FavoritesController } from "./favorites.controller";
 import { FavoritesService } from "./favorites.service";
 
 @Module({
-  imports: [JwtModule],
+  imports: [AuthModule],
   controllers: [FavoritesController],
   providers: [FavoritesService],
 })

@@ -34,6 +34,8 @@ npm run start:dev
 
 Backend API будет доступен на `http://localhost:3000/api`.
 
+PostgreSQL в Docker проброшен на локальный порт `5433`, чтобы не конфликтовать с системным Postgres на `5432`.
+
 Тестовый админ:
 
 - email: `admin@autobridge.local`

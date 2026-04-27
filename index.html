@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AutoBridge</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&amp;display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body id="top">
+    <div class="page-shell">
+      <div class="page">
+        <header class="topbar">
+          <a class="logo-link" href="./index.html#top" aria-label="AutoBridge">
+            <img class="logo" src="./лого.png" alt="AutoBridge" />
+          </a>
+          <nav class="topnav">
+            <a href="./catalog.html">Каталог</a>
+            <a href="./index.html#how">Как это работает</a>
+            <details class="nav-dropdown">
+              <summary>Для партнеров</summary>
+              <div class="nav-dropdown-menu">
+                <a href="./seller.html">Продавцам</a>
+                <a href="./carrier.html">Перевозчикам</a>
+              </div>
+            </details>
+            <a href="./index.html#top">О нас</a>
+          </nav>
+          <div class="topbar-search">Поиск авто, бренд, кузова...</div>
+          <a class="favorite-link" href="./favorites.html">Избранное</a>
+          <details class="profile-dropdown">
+            <summary class="icon profile-icon" aria-label="Личный кабинет"></summary>
+            <div class="profile-dropdown-menu">
+              <a href="#login-modal">Войти</a>
+              <a href="./auth.html">Регистрация</a>
+            </div>
+          </details>
+        </header>
+
+        <section class="hero">
+          <div class="hero-main-card">
+            <h1>
+              Прямой путь к авто из<br />
+              Китая с прозрачной<br />
+              ценой и понятной<br />
+              доставкой
+            </h1>
+            <p>
+              Выбирайте автомобиль, сравнивайте продавцов и<br />
+              перевозчиков, общайтесь в чате с переводом и<br />
+              сразу понимайте итоговую стоимость под ключ.
+            </p>
+            <a href="./catalog.html" class="hero-button">Подобрать авто</a>
+          </div>
+
+          <div class="hero-side-card hero-side-dark">
+            <h2>Что делает AutoBridge</h2>
+            <p>
+              Объединяем на одной площадке<br />
+              покупателей, профессиональных<br />
+              перевозчиков и продавцов из<br />
+              Китая
+            </p>
+            <p>Все этапы сделки в одном месте</p>
+          </div>
+
+          <div class="hero-side-card hero-side-light">
+            <span>Экономия на реальных кейсах</span>
+            <strong>До 1 000 000 ₽</strong>
+            <p>Даже с учетом логистики и<br />таможенных сборов</p>
+          </div>
+        </section>
+
+        <section class="section quick-start">
+          <div class="section-header">
+            <span class="section-label">Быстрый старт</span>
+            <h2>Готовые сценарии поиска</h2>
+          </div>
+
+          <div class="chips quick-chips">
+            <span>Авто до 1.5 млн ₽</span>
+            <span>Семейные кроссоверы</span>
+            <span>Седаны до 3 лет</span>
+            <span>Электромобили</span>
+            <span>Популярно в РФ</span>
+            <span>Недавно на сайте</span>
+            <span>Проверенные продавцы</span>
+            <span>С минимальным пробегом</span>
+          </div>
+
+          <div class="scenario-layout">
+            <article class="card scenario-intro">
+              <span class="card-kicker">ИИ-подбор</span>
+              <h3>
+                ИИ-помощник быстро<br />
+                найдет подходящее авто
+              </h3>
+              <p>
+                Опишите бюджет, тип кузова, приоритеты, ценовой<br />
+                сегмент и все, что для вас важно в будущей машине.<br />
+                Система предложит подходящие модели, покажет<br />
+                примерную цену и планы перемещения каждого<br />
+                из вариантов.
+              </p>
+              <div class="scenario-input">Введите запрос или попробуйте готовые сценарии</div>
+              <div class="chips chips-small">
+                <span>Для семьи</span>
+                <span>Для города</span>
+                <span>До 2 млн ₽</span>
+                <span class="chip-dark">Экономичный</span>
+                <span>Электро</span>
+              </div>
+            </article>
+
+            <article class="card scenario-results">
+              <div class="request-box">
+                <span class="card-kicker">Запрос</span>
+                <p>
+                  Нужно авто с хорошей экономией при покупке и разумными
+                  затратами на обслуживание
+                </p>
+              </div>
+
+              <div class="result-item">
+                <h4>Geely Emgrand</h4>
+                <p>Цена в Китае от 730 000 ₽, под ключ от 1 290 000 ₽</p>
+                <div class="result-meta">
+                  <span>низкий расход топлива</span>
+                  <span>10 предложений</span>
+                </div>
+              </div>
+
+              <div class="result-item">
+                <h4>Changan Alsvin</h4>
+                <p>Цена в Китае от 850 000 ₽, под ключ от 1 100 000 ₽</p>
+                <div class="result-meta">
+                  <span>доступный сегмент</span>
+                  <span>6 предложений</span>
+                </div>
+              </div>
+
+              <div class="result-item">
+                <h4>BYD Qin Plus DM-i</h4>
+                <p>Цена в Китае от 1 100 000 ₽, под ключ от 1 670 000 ₽</p>
+                <div class="result-meta">
+                  <span>гибрид</span>
+                  <span>11 предложений</span>
+                </div>
+              </div>
+
+              <div class="result-actions">
+                <span class="chip-action chip-action-blue">Открыть все результаты</span>
+                <span class="chip-action">Как считается цена</span>
+              </div>
+            </article>
+          </div>
+        </section>
+
+        <section id="catalog" class="section picks">
+          <div class="section-header">
+            <span class="section-label">Подборки</span>
+            <h2>Все в одном месте</h2>
+          </div>
+
+          <div class="pick-grid">
+            <article class="pick-card pick-light">
+              <img src="./хэтчбеки.png" alt="Хэтчбеки" />
+              <div class="pick-overlay dark-text">
+                <h3>Хэтчбеки</h3>
+                <span>76 объявлений</span>
+              </div>
+            </article>
+
+            <article class="pick-card pick-dark">
+              <img src="./кроссоверы.png" alt="Кроссоверы" />
+              <div class="pick-overlay">
+                <h3>Кроссоверы</h3>
+                <span>144 объявления</span>
+              </div>
+            </article>
+
+            <article class="pick-card pick-blue">
+              <img src="./с низким пробегом.png" alt="С низким пробегом" />
+              <div class="pick-overlay">
+                <h3>С низким пробегом</h3>
+                <span>До 20 тыс. км</span>
+              </div>
+            </article>
+
+            <article class="pick-card pick-light">
+              <img src="./самые популярные.png" alt="Самые популярные" />
+              <div class="pick-overlay dark-text">
+                <h3>Самые популярные</h3>
+                <span>Топ по просмотрам</span>
+              </div>
+            </article>
+
+            <article class="pick-card pick-dark">
+              <img src="./седаны.png" alt="Седаны" />
+              <div class="pick-overlay">
+                <h3>Седаны</h3>
+                <span>131 объявление</span>
+              </div>
+            </article>
+
+            <a class="catalog-link" href="./catalog.html">
+              <span>Смотреть каталог</span>
+              <span class="catalog-link-arrow"></span>
+            </a>
+          </div>
+        </section>
+
+        <section id="catalog-list" class="section listing-section">
+          <div class="section-header">
+            <span class="section-label">Объявления</span>
+            <h2>
+              Выбирай автомобиль<br />
+              мечты
+            </h2>
+          </div>
+
+          <div class="listing-layout">
+            <aside class="card filter-card">
+              <h3>Фильтры</h3>
+
+              <label>Цена в Китае</label>
+              <div class="field-row">
+                <span>от</span>
+                <span>до</span>
+              </div>
+
+              <label>Цена под ключ</label>
+              <div class="field-row">
+                <span>от</span>
+                <span>до</span>
+              </div>
+
+              <div class="select-pill">Тип кузова</div>
+              <div class="select-pill">Марка</div>
+              <div class="select-pill">Двигатель</div>
+
+              <label>Год</label>
+              <div class="field-row">
+                <span>от</span>
+                <span>до</span>
+              </div>
+
+              <div class="select-pill">Привод</div>
+
+              <label>Мощность</label>
+              <div class="field-row">
+                <span>от</span>
+                <span>до</span>
+              </div>
+
+              <button type="button">Применить</button>
+            </aside>
+
+            <div class="listing-main">
+              <div class="chips chips-small listing-chips">
+                <span class="chip-dark">Все</span>
+                <span>Популярные</span>
+                <span>Проверенные продавцы</span>
+              </div>
+
+              <div class="listing-grid">
+                <article class="blank-card"></article>
+                <article class="blank-card"></article>
+
+                <article class="listing-card">
+                  <div class="listing-cover">
+                    <span class="verify-pill">Проверен</span>
+                  </div>
+                  <div class="listing-body">
+                    <h3>Haval Jolion 2024</h3>
+                    <p>1.5Т • 9 400 км</p>
+                    <span>Под ключ от 1 536 852 ₽</span>
+                    <strong>1 010 300 ₽</strong>
+                  </div>
+                </article>
+
+                <article class="blank-card"></article>
+              </div>
+            </div>
+          </div>
+
+          <a href="./catalog.html" class="more-button">Смотреть больше</a>
+        </section>
+
+        <section id="how" class="section how-section">
+          <span class="section-label">Как это работает</span>
+
+          <div class="card benefit-strip">
+            <div>
+              <h3>Все этапы сделки в одном месте</h3>
+              <p>От выбора авто до получения без целочек посредников</p>
+            </div>
+            <div>
+              <h3>Безопасная оплата</h3>
+              <p>Платеж привязан к условиям сделки и статусу исполнения</p>
+            </div>
+            <div>
+              <h3>Сравнение перевозчиков</h3>
+              <p>Выбор перевозчика, условий логистики и цены или заказов прямо из Китая</p>
+            </div>
+          </div>
+
+          <h2 class="big-copy">
+            Покупатель проходит путь от выбора авто<br />
+            до доставки с полной прозрачностью<br />
+            процесса
+          </h2>
+
+          <div class="steps-grid">
+            <article class="card step-card">
+              <span class="step-no">01</span>
+              <h3>Выбор автомобиля</h3>
+              <p>Каталог, подбор, фильтры или помощь ИИ помогают быстро сузить поиск и найти себе то, что будет по душе</p>
+            </article>
+
+            <article class="card step-card">
+              <span class="step-no">02</span>
+              <h3>Расчет цены</h3>
+              <p>Платформа показывает цену в Китае, логистику, сборы и итог под ключ</p>
+            </article>
+
+            <article class="card step-card">
+              <span class="step-no">03</span>
+              <h3>Выбор доставки</h3>
+              <p>Можно сравнить перевозчиков или забрать автомобиль своими силами</p>
+            </article>
+
+            <article class="card step-card">
+              <span class="step-no">04</span>
+              <h3>Чат и сделка</h3>
+              <p>Чат с продавцом или перевозчиком работает со встроенным переводом и статусами</p>
+            </article>
+          </div>
+        </section>
+
+        <section id="partners" class="section roles-section">
+          <span class="section-label">Три стороны платформы</span>
+          <h2 class="big-copy">
+            Интерфейс понятен покупателю и<br />
+            одновременно создает ценность<br />
+            для партнеров
+          </h2>
+
+          <div class="roles-grid">
+            <article class="card role-card role-light">
+              <h3>Покупатель</h3>
+              <strong>Экономия, контроль и удобный сценарий выбора</strong>
+              <p>Каталог, сравнение вариантов, понятная итоговая цена и безопасная сделка.</p>
+            </article>
+
+            <article class="card role-card role-dark">
+              <h3>Перевозчик</h3>
+              <strong>Стабильный поток заказов и прозрачные условия сделки</strong>
+              <p>Профиль, верификация, карточка услуг и прямой доступ к горячим заказам.</p>
+            </article>
+
+            <article class="card role-card role-blue">
+              <h3>Продавец</h3>
+              <strong>Выход на рынок РФ без лишней цепочки посредников</strong>
+              <p>Размещение объявлений, прямой контакт с покупателем и быстрые доверия к лоту.</p>
+            </article>
+          </div>
+
+          <div class="bridge-card">
+            <div class="bridge-copy">
+              <span class="bridge-label">Почему это работает</span>
+              <h3>Мост между китайским рынком и покупателю в РФ</h3>
+              <p>AutoBridge объединяет в одном интерфейсе каталог, расчет финальной стоимости, логистику, чат и контроль сделки</p>
+            </div>
+
+            <div class="bridge-stat">
+              <strong>3 роли</strong>
+              <span>1 платформа</span>
+            </div>
+          </div>
+        </section>
+
+        <footer id="about" class="footer">
+          Тут будет подвал, пока об этом не думаем
+        </footer>
+      </div>
+    </div>
+
+    <div id="login-modal" class="login-modal">
+      <a class="login-modal-backdrop" href="#top" aria-label="Закрыть вход"></a>
+      <div class="login-dialog" role="dialog" aria-modal="true" aria-labelledby="login-title">
+        <a class="login-close" href="#top" aria-label="Закрыть">×</a>
+        <span class="card-kicker">Личный кабинет</span>
+        <h2 id="login-title">Войти в AutoBridge</h2>
+        <p>Сохраняйте избранное, заявки и историю подбора в одном месте.</p>
+        <form class="modal-login-form">
+          <input type="email" placeholder="Email" />
+          <input type="password" placeholder="Пароль" />
+          <button type="button">Войти</button>
+        </form>
+        <a class="modal-register-link" href="./auth.html">Создать аккаунт</a>
+      </div>
+    </div>
+  </body>
+</html>

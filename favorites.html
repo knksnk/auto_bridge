@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Избранное AutoBridge</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&amp;display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body id="top">
+    <div class="page-shell">
+      <div class="page inner-page">
+        <header class="topbar">
+          <a class="logo-link" href="./index.html#top" aria-label="AutoBridge">
+            <img class="logo" src="./лого.png" alt="AutoBridge" />
+          </a>
+          <nav class="topnav">
+            <a href="./catalog.html">Каталог</a>
+            <a href="./index.html#how">Как это работает</a>
+            <details class="nav-dropdown">
+              <summary>Для партнеров</summary>
+              <div class="nav-dropdown-menu">
+                <a href="./seller.html">Продавцам</a>
+                <a href="./carrier.html">Перевозчикам</a>
+              </div>
+            </details>
+            <a href="./index.html#top">О нас</a>
+          </nav>
+          <div class="topbar-search">Поиск авто, бренд, кузова...</div>
+          <a class="favorite-link" href="./favorites.html">Избранное</a>
+          <details class="profile-dropdown">
+            <summary class="icon profile-icon" aria-label="Личный кабинет"></summary>
+            <div class="profile-dropdown-menu">
+              <a href="#login-modal">Войти</a>
+              <a href="./auth.html">Регистрация</a>
+            </div>
+          </details>
+        </header>
+
+        <main>
+          <section class="inner-hero compact-hero">
+            <span class="section-label">Избранное</span>
+            <h1>Автомобили, к которым<br />хочется вернуться</h1>
+            <p>Здесь собраны понравившиеся объявления, а ниже — похожие варианты с близкой ценой и классом.</p>
+          </section>
+
+          <section class="section-lite favorites-section">
+            <div class="section-header">
+              <span class="section-label">Лайкнутые объявления</span>
+            </div>
+            <div class="auto-feed favorites-feed">
+              <article class="auto-card">
+                <div class="auto-cover"><span class="favorite-badge">В избранном</span></div>
+                <div class="auto-body">
+                  <h3>Haval Jolion 2024</h3>
+                  <p>1.5T • 9 400 км • кроссовер</p>
+                  <span>Под ключ от 1 536 852 ₽</span>
+                  <strong>1 010 300 ₽</strong>
+                </div>
+              </article>
+              <article class="auto-card">
+                <div class="auto-cover auto-cover-dark"><span class="favorite-badge">В избранном</span></div>
+                <div class="auto-body">
+                  <h3>Geely Monjaro 2023</h3>
+                  <p>2.0T • 18 200 км • полный привод</p>
+                  <span>Под ключ от 2 640 000 ₽</span>
+                  <strong>1 920 000 ₽</strong>
+                </div>
+              </article>
+            </div>
+          </section>
+
+          <section class="section-lite related-section favorites-related-section">
+            <div class="section-header">
+              <span class="section-label">Похожие объявления</span>
+            </div>
+            <div class="auto-feed">
+              <article class="auto-card">
+                <div class="auto-cover auto-cover-soft"><span class="verify-pill">Проверен</span></div>
+                <div class="auto-body">
+                  <h3>Chery Tiggo 7 Pro</h3>
+                  <p>1.6T • 15 600 км • семейный</p>
+                  <span>Под ключ от 1 890 000 ₽</span>
+                  <strong>1 240 000 ₽</strong>
+                </div>
+              </article>
+              <article class="auto-card">
+                <div class="auto-cover"><span class="verify-pill">Проверен</span></div>
+                <div class="auto-body">
+                  <h3>Changan Alsvin 2024</h3>
+                  <p>1.5L • 6 800 км • седан</p>
+                  <span>Под ключ от 1 180 000 ₽</span>
+                  <strong>650 000 ₽</strong>
+                </div>
+              </article>
+              <article class="auto-card">
+                <div class="auto-cover auto-cover-dark"><span class="verify-pill">Проверен</span></div>
+                <div class="auto-body">
+                  <h3>BYD Qin Plus DM-i</h3>
+                  <p>Гибрид • 12 000 км • седан</p>
+                  <span>Под ключ от 1 670 000 ₽</span>
+                  <strong>1 100 000 ₽</strong>
+                </div>
+              </article>
+            </div>
+          </section>
+        </main>
+      </div>
+    </div>
+
+    <div id="login-modal" class="login-modal">
+      <a class="login-modal-backdrop" href="#top" aria-label="Закрыть вход"></a>
+      <div class="login-dialog" role="dialog" aria-modal="true" aria-labelledby="login-title">
+        <a class="login-close" href="#top" aria-label="Закрыть">×</a>
+        <span class="card-kicker">Личный кабинет</span>
+        <h2 id="login-title">Войти в AutoBridge</h2>
+        <p>Сохраняйте избранное, заявки и историю подбора в одном месте.</p>
+        <form class="modal-login-form">
+          <input type="email" placeholder="Email" />
+          <input type="password" placeholder="Пароль" />
+          <button type="button">Войти</button>
+        </form>
+        <a class="modal-register-link" href="./auth.html">Создать аккаунт</a>
+      </div>
+    </div>
+  </body>
+</html>

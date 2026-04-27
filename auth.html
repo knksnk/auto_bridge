@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Регистрация AutoBridge</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&amp;display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body id="top">
+    <div class="page-shell">
+      <div class="page inner-page">
+        <header class="topbar">
+          <a class="logo-link" href="./index.html#top" aria-label="AutoBridge">
+            <img class="logo" src="./лого.png" alt="AutoBridge" />
+          </a>
+          <nav class="topnav">
+            <a href="./catalog.html">Каталог</a>
+            <a href="./index.html#how">Как это работает</a>
+            <details class="nav-dropdown">
+              <summary>Для партнеров</summary>
+              <div class="nav-dropdown-menu">
+                <a href="./seller.html">Продавцам</a>
+                <a href="./carrier.html">Перевозчикам</a>
+              </div>
+            </details>
+            <a href="./index.html#top">О нас</a>
+          </nav>
+          <div class="topbar-search">Поиск авто, бренд, кузова...</div>
+          <a class="favorite-link" href="./favorites.html">Избранное</a>
+          <details class="profile-dropdown">
+            <summary class="icon profile-icon" aria-label="Личный кабинет"></summary>
+            <div class="profile-dropdown-menu">
+              <a href="#login-modal">Войти</a>
+              <a href="./auth.html">Регистрация</a>
+            </div>
+          </details>
+        </header>
+
+        <main>
+          <section class="register-layout">
+            <div class="register-copy">
+              <span class="section-label">Регистрация</span>
+              <h1>Создайте аккаунт для подбора и сохранения автомобилей</h1>
+              <p>
+                Личный кабинет соберет избранное, заявки и историю общения с продавцами в одном спокойном интерфейсе.
+              </p>
+              <div class="register-benefits">
+                <span>Избранное</span>
+                <span>Заявки</span>
+                <span>История подбора</span>
+              </div>
+            </div>
+
+            <form class="card register-form">
+              <span class="card-kicker">Новый аккаунт</span>
+              <h2>Зарегистрироваться</h2>
+              <input type="text" placeholder="Имя" />
+              <input type="email" placeholder="Email" />
+              <input type="tel" placeholder="Телефон" />
+              <input type="text" placeholder="Город" />
+              <input type="password" placeholder="Пароль" />
+              <button type="button">Создать аккаунт</button>
+              <p>Уже есть аккаунт? <a href="#login-modal">Войти</a></p>
+            </form>
+          </section>
+        </main>
+      </div>
+    </div>
+
+    <div id="login-modal" class="login-modal">
+      <a class="login-modal-backdrop" href="#top" aria-label="Закрыть вход"></a>
+      <div class="login-dialog" role="dialog" aria-modal="true" aria-labelledby="login-title">
+        <a class="login-close" href="#top" aria-label="Закрыть">×</a>
+        <span class="card-kicker">Личный кабинет</span>
+        <h2 id="login-title">Войти в AutoBridge</h2>
+        <p>Сохраняйте избранное, заявки и историю подбора в одном месте.</p>
+        <form class="modal-login-form">
+          <input type="email" placeholder="Email" />
+          <input type="password" placeholder="Пароль" />
+          <button type="button">Войти</button>
+        </form>
+        <a class="modal-register-link" href="./auth.html">Создать аккаунт</a>
+      </div>
+    </div>
+  </body>
+</html>

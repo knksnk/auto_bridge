@@ -1,6 +1,7 @@
 import { useState, type FormEvent } from "react";
 import { useOutletContext } from "react-router-dom";
 import { authService } from "../services/authService";
+import { useMarketplace } from "../state/MarketplaceState";
 import type { RegisterPayload } from "../types/auth";
 
 interface LayoutContext {
@@ -18,6 +19,8 @@ const initialForm: RegisterPayload = {
 export function RegisterPage() {
   const { openLogin } = useOutletContext<LayoutContext>();
   const [form, setForm] = useState(initialForm);
+  const [isSubmitting, setSubmitting] = useState(false);
+  const { showToast } = useMarketplace();
 
   const update = (key: keyof RegisterPayload, value: string) => {
     setForm((current) => ({ ...current, [key]: value }));
@@ -25,8 +28,11 @@ export function RegisterPage() {
 
   const submit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    setSubmitting(true);
     await authService.register(form);
+    setSubmitting(false);
     setForm(initialForm);
+    showToast("Аккаунт создан. Дальше можно подключать backend-авторизацию.");
   };
 
   return (
@@ -51,7 +57,9 @@ export function RegisterPage() {
           <input type="tel" placeholder="Телефон" value={form.phone} onChange={(event) => update("phone", event.target.value)} />
           <input type="text" placeholder="Город" value={form.city} onChange={(event) => update("city", event.target.value)} />
           <input type="password" placeholder="Пароль" value={form.password} onChange={(event) => update("password", event.target.value)} />
-          <button type="submit">Создать аккаунт</button>
+          <button type="submit" disabled={isSubmitting}>
+            {isSubmitting ? "Создаем..." : "Создать аккаунт"}
+          </button>
           <p>
             Уже есть аккаунт?{" "}
             <button className="inline-button" type="button" onClick={openLogin}>

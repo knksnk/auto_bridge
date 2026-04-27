@@ -1,16 +1,12 @@
-import { useEffect, useState } from "react";
 import { AutoCard } from "../components/AutoCard";
-import { carsService } from "../services/carsService";
-import type { CarListing } from "../types/catalog";
+import { catalogCars } from "../data/mockCars";
+import { useMarketplace } from "../state/MarketplaceState";
 
 export function FavoritesPage() {
-  const [favorites, setFavorites] = useState<CarListing[]>([]);
-  const [related, setRelated] = useState<CarListing[]>([]);
-
-  useEffect(() => {
-    void carsService.getFavoriteCars().then(setFavorites);
-    void carsService.getRelatedCars().then(setRelated);
-  }, []);
+  const { favoriteIds, compareIds, clearCompare, compareMany } = useMarketplace();
+  const favorites = catalogCars.filter((car) => favoriteIds.includes(car.id));
+  const related = catalogCars.filter((car) => !favoriteIds.includes(car.id)).slice(0, 3);
+  const compareCars = catalogCars.filter((car) => compareIds.includes(car.id));
 
   return (
     <main>
@@ -23,12 +19,29 @@ export function FavoritesPage() {
       <section className="section-lite favorites-section">
         <div className="section-header">
           <span className="section-label">Лайкнутые объявления</span>
+          {favorites.length > 1 && (
+            <button
+              className="compare-selected-button"
+              type="button"
+              onClick={() => compareMany(favorites.map((car) => car.id))}
+            >
+              Сравнить выбранные
+            </button>
+          )}
         </div>
-        <div className="auto-feed catalog-auto-feed">
-          {favorites.map((car) => (
-            <AutoCard car={car} key={car.id} />
-          ))}
-        </div>
+        {favorites.length > 0 ? (
+          <div className="auto-feed catalog-auto-feed">
+            {favorites.map((car) => (
+              <AutoCard car={car} key={car.id} />
+            ))}
+          </div>
+        ) : (
+          <div className="empty-state">
+            <span>Пока пусто</span>
+            <h2>Сохраняйте автомобили сердечком</h2>
+            <p>Здесь появятся объявления для сравнения цены, логистики и продавцов.</p>
+          </div>
+        )}
       </section>
 
       <section className="section-lite related-section favorites-related-section">
@@ -41,6 +54,17 @@ export function FavoritesPage() {
           ))}
         </div>
       </section>
+      {compareCars.length > 0 && (
+        <aside className="compare-bar" aria-label="Сравнение автомобилей">
+          <div>
+            <span>Сравнение</span>
+            <strong>{compareCars.map((car) => car.title).join(" • ")}</strong>
+          </div>
+          <button type="button" onClick={clearCompare}>
+            Очистить
+          </button>
+        </aside>
+      )}
     </main>
   );
 }

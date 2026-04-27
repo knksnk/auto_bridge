@@ -1,5 +1,6 @@
 import { useState, type FormEvent } from "react";
 import { partnerService } from "../services/partnerService";
+import { useMarketplace } from "../state/MarketplaceState";
 import type { PartnerKind, PartnerLead } from "../types/partners";
 
 interface PartnerFormProps {
@@ -19,6 +20,8 @@ const emptyLead = (kind: PartnerKind): PartnerLead => ({
 
 export function PartnerForm({ kind, title }: PartnerFormProps) {
   const [lead, setLead] = useState<PartnerLead>(() => emptyLead(kind));
+  const [isSubmitting, setSubmitting] = useState(false);
+  const { showToast } = useMarketplace();
 
   const update = (key: keyof PartnerLead, value: string) => {
     setLead((current) => ({ ...current, [key]: value }));
@@ -26,8 +29,11 @@ export function PartnerForm({ kind, title }: PartnerFormProps) {
 
   const submit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    setSubmitting(true);
     await partnerService.submitLead(lead);
+    setSubmitting(false);
     setLead(emptyLead(kind));
+    showToast("Заявка отправлена. Мы покажем этот сценарий backend-команде.");
   };
 
   return (
@@ -39,7 +45,9 @@ export function PartnerForm({ kind, title }: PartnerFormProps) {
       <input type="email" placeholder="Email" value={lead.email} onChange={(event) => update("email", event.target.value)} />
       <input type="text" placeholder="Город" value={lead.city} onChange={(event) => update("city", event.target.value)} />
       <textarea placeholder="Комментарий" value={lead.comment} onChange={(event) => update("comment", event.target.value)} />
-      <button type="submit">Отправить заявку</button>
+      <button type="submit" disabled={isSubmitting}>
+        {isSubmitting ? "Отправляем..." : "Отправить заявку"}
+      </button>
     </form>
   );
 }

@@ -44,6 +44,21 @@ export function HomePage() {
           <Link to="/catalog" className="hero-button">
             Подобрать авто
           </Link>
+          <div className="hero-trust-row">
+            <span>Проверенные продавцы</span>
+            <span>Прозрачная цена</span>
+            <span>Чат с переводом</span>
+          </div>
+        </div>
+
+        <div className="hero-route-widget" aria-label="Маршрут доставки">
+          <span>Маршрут сделки</span>
+          <div>
+            <strong>Китай</strong>
+            <i />
+            <strong>Россия</strong>
+          </div>
+          <p>Расчет цены, логистика и статусы в одном сценарии</p>
         </div>
 
         <div className="hero-side-card hero-side-dark">
@@ -73,7 +88,9 @@ export function HomePage() {
 
         <div className="chips quick-chips">
           {quickScenarios.map((scenario) => (
-            <span key={scenario}>{scenario}</span>
+            <Link key={scenario} to={`/catalog?scenario=${encodeURIComponent(scenario)}`}>
+              {scenario}
+            </Link>
           ))}
         </div>
 
@@ -235,6 +252,31 @@ export function HomePage() {
           ].map(([number, title, description]) => (
             <article className="card step-card" key={number}>
               <span className="step-no">{number}</span>
+              <h3>{title}</h3>
+              <p>{description}</p>
+            </article>
+          ))}
+        </div>
+      </section>
+
+      <section className="section trust-section">
+        <div className="section-header">
+          <span className="section-label">Доверие к сделке</span>
+          <h2>
+            Покупка выглядит
+            <br />
+            предсказуемой
+          </h2>
+        </div>
+        <div className="trust-grid">
+          {[
+            ["01", "Как считается цена", "Отдельно показываем цену в Китае, логистику, таможенные сборы и итог под ключ."],
+            ["02", "Безопасность оплаты", "Платеж привязан к этапам сделки, статусам перевозки и подтверждению документов."],
+            ["03", "Проверка продавца", "У лота есть статус, рейтинг продавца, фотоотчет и отметка проверки."],
+            ["04", "Логистика и таможня", "Покупатель заранее видит маршрут, срок доставки и примерную стоимость перемещения."],
+          ].map(([number, title, description]) => (
+            <article className="card trust-card" key={number}>
+              <span>{number}</span>
               <h3>{title}</h3>
               <p>{description}</p>
             </article>

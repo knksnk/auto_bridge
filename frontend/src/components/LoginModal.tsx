@@ -1,6 +1,7 @@
 import { useState, type FormEvent } from "react";
 import { Link } from "react-router-dom";
 import { authService } from "../services/authService";
+import { useMarketplace } from "../state/MarketplaceState";
 import type { LoginPayload } from "../types/auth";
 
 interface LoginModalProps {
@@ -10,10 +11,15 @@ interface LoginModalProps {
 
 export function LoginModal({ isOpen, onClose }: LoginModalProps) {
   const [form, setForm] = useState<LoginPayload>({ email: "", password: "" });
+  const [isSubmitting, setSubmitting] = useState(false);
+  const { showToast } = useMarketplace();
 
   const submitLogin = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    setSubmitting(true);
     await authService.login(form);
+    setSubmitting(false);
+    showToast("Вход выполнен. Кабинет готов к будущему backend.");
     onClose();
   };
 
@@ -40,7 +46,9 @@ export function LoginModal({ isOpen, onClose }: LoginModalProps) {
             value={form.password}
             onChange={(event) => setForm((current) => ({ ...current, password: event.target.value }))}
           />
-          <button type="submit">Войти</button>
+          <button type="submit" disabled={isSubmitting}>
+            {isSubmitting ? "Проверяем..." : "Войти"}
+          </button>
         </form>
         <Link className="modal-register-link" to="/auth" onClick={onClose}>
           Создать аккаунт

@@ -9,6 +9,7 @@ const revealSelectors = [
   ".card",
   ".pick-card",
   ".quick-chips span",
+  ".quick-chips a",
   ".result-item",
   ".partner-copy",
   ".partner-form",

@@ -1,0 +1,16 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: autobridge-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: autobridge
+      POSTGRES_USER: autobridge
+      POSTGRES_PASSWORD: autobridge
+    ports:
+      - "5432:5432"
+    volumes:
+      - autobridge-postgres-data:/var/lib/postgresql/data
+
+volumes:
+  autobridge-postgres-data:

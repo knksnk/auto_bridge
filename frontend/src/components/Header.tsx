@@ -74,6 +74,7 @@ export function Header({ onLoginClick }: HeaderProps) {
               Войти
             </button>
             <Link to="/auth">Регистрация</Link>
+            <Link to="/admin">Админка</Link>
           </div>
         </details>
       </header>

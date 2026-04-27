@@ -66,7 +66,7 @@ export function AutoCard({ car, compact = false }: AutoCardProps) {
         </div>
         <span className="turnkey-price">{car.logisticsPrice}</span>
         <div className="auto-actions">
-          <Link className="auto-primary-action" to={`/catalog?car=${car.id}`}>
+          <Link className="auto-primary-action" to={`/catalog/${car.slug ?? car.id}`}>
             Смотреть
           </Link>
           <button

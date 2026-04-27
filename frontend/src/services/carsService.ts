@@ -1,5 +1,6 @@
 import { catalogCars, favoriteCarIds } from "../data/mockCars";
-import type { CarListing, CatalogQuery } from "../types/catalog";
+import type { CarListing, CatalogQuery, CatalogResponse, LeadPayload } from "../types/catalog";
+import { apiClient } from "./apiClient";
 
 const wait = <T,>(data: T) => new Promise<T>((resolve) => window.setTimeout(() => resolve(data), 420));
 
@@ -74,7 +75,82 @@ const sortCars = (cars: CarListing[], sortId?: string) => {
 };
 
 export const carsService = {
-  getCatalogCars: (query: CatalogQuery = {}): Promise<CarListing[]> => {
+  getCatalogCars: async (query: CatalogQuery = {}): Promise<CarListing[]> => {
+    try {
+      const response = await apiClient.get<CatalogResponse>(`/cars${toQueryString(query)}`);
+      return response.items;
+    } catch {
+      return getMockCatalogCars(query);
+    }
+  },
+
+  getCatalogPage: async (query: CatalogQuery = {}): Promise<CatalogResponse> => {
+    try {
+      return await apiClient.get<CatalogResponse>(`/cars${toQueryString(query)}`);
+    } catch {
+      const items = await getMockCatalogCars(query);
+      return {
+        items,
+        total: catalogCars.length,
+        page: query.page ?? 1,
+        limit: query.limit ?? items.length,
+        hasMore: items.length < catalogCars.length,
+      };
+    }
+  },
+
+  getCarBySlug: async (slug: string): Promise<CarListing> => {
+    try {
+      return await apiClient.get<CarListing>(`/cars/${slug}`);
+    } catch {
+      const car = catalogCars.find((item) => (item.slug ?? item.id) === slug || item.id === slug);
+
+      if (!car) {
+        throw new Error("Автомобиль не найден");
+      }
+
+      return car;
+    }
+  },
+
+  getSimilarCars: async (slug: string): Promise<CarListing[]> => {
+    try {
+      return await apiClient.get<CarListing[]>(`/cars/${slug}/similar`);
+    } catch {
+      const base = catalogCars.find((item) => (item.slug ?? item.id) === slug || item.id === slug);
+      return catalogCars
+        .filter((car) => car.id !== base?.id)
+        .filter((car) => !base || car.brand === base.brand || car.body === base.body)
+        .slice(0, 3);
+    }
+  },
+
+  submitLead: async (payload: LeadPayload) => {
+    try {
+      return await apiClient.post("/leads", payload);
+    } catch {
+      return payload;
+    }
+  },
+
+  getFavoriteCars: async (): Promise<CarListing[]> => {
+    try {
+      return await apiClient.get<CarListing[]>("/me/favorites");
+    } catch {
+      return wait(catalogCars.filter((car) => favoriteCarIds.includes(car.id)));
+    }
+  },
+
+  getRelatedCars: async (): Promise<CarListing[]> => {
+    try {
+      return await apiClient.get<CarListing[]>("/cars?limit=3");
+    } catch {
+      return wait(catalogCars.filter((car) => !favoriteCarIds.includes(car.id)).slice(0, 3));
+    }
+  },
+};
+
+function getMockCatalogCars(query: CatalogQuery = {}): Promise<CarListing[]> {
     const { filters, search = "", scenario, sort, limit } = query;
     const filtered = catalogCars.filter((car) => {
       const yearFrom = filters?.yearFrom ? Number(filters.yearFrom) : undefined;
@@ -102,11 +178,32 @@ export const carsService = {
 
     const sorted = sortCars(filtered, sort?.id);
     return wait(typeof limit === "number" ? sorted.slice(0, limit) : sorted);
-  },
+}
 
-  getFavoriteCars: (): Promise<CarListing[]> =>
-    wait(catalogCars.filter((car) => favoriteCarIds.includes(car.id))),
+function toQueryString(query: CatalogQuery) {
+  const params = new URLSearchParams();
 
-  getRelatedCars: (): Promise<CarListing[]> =>
-    wait(catalogCars.filter((car) => !favoriteCarIds.includes(car.id)).slice(0, 3)),
-};
+  if (query.search) {
+    params.set("search", query.search);
+  }
+
+  if (query.sort?.id) {
+    params.set("sort", query.sort.id);
+  }
+
+  if (query.limit) {
+    params.set("limit", String(query.limit));
+  }
+
+  if (query.page) {
+    params.set("page", String(query.page));
+  }
+
+  Object.entries(query.filters ?? {}).forEach(([key, value]) => {
+    if (value) {
+      params.set(key, value);
+    }
+  });
+
+  return params.size ? `?${params.toString()}` : "";
+}

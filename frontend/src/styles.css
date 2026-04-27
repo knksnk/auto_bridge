@@ -3440,6 +3440,44 @@ a {
   min-height: 100vh;
 }
 
+.page-shell {
+  position: relative;
+  overflow: clip;
+}
+
+.page-shell::before,
+.page-shell::after {
+  content: "";
+  position: fixed;
+  z-index: 0;
+  pointer-events: none;
+  border-radius: 999px;
+  filter: blur(12px);
+}
+
+.page-shell::before {
+  width: min(42vw, 720px);
+  height: min(42vw, 720px);
+  top: -18vw;
+  right: -12vw;
+  background: radial-gradient(circle, rgba(143, 202, 247, 0.34), rgba(255, 255, 255, 0.04) 58%, transparent 70%);
+  animation: ambientFloatOne 14s ease-in-out infinite;
+}
+
+.page-shell::after {
+  width: min(34vw, 560px);
+  height: min(34vw, 560px);
+  left: -14vw;
+  bottom: 12vh;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.72), rgba(143, 202, 247, 0.12) 56%, transparent 72%);
+  animation: ambientFloatTwo 16s ease-in-out infinite;
+}
+
+.page {
+  position: relative;
+  z-index: 1;
+}
+
 .profile-dropdown-menu .menu-button,
 .sort-menu button,
 .inline-button {
@@ -3577,4 +3615,560 @@ a {
 .ui-button-ghost {
   background: #edf7ff;
   color: var(--text);
+}
+
+/* React motion and premium interaction layer. */
+:root {
+  --motion-ease: cubic-bezier(0.2, 0.8, 0.2, 1);
+  --motion-spring: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  [data-reveal] {
+    opacity: 0;
+    transform: translate3d(0, 34px, 0) scale(0.985);
+    filter: blur(7px);
+    transition:
+      opacity 0.78s var(--motion-ease),
+      transform 0.78s var(--motion-ease),
+      filter 0.78s var(--motion-ease),
+      box-shadow 0.24s ease,
+      background 0.24s ease;
+    transition-delay: var(--reveal-delay, 0ms);
+    will-change: opacity, transform, filter;
+  }
+
+  [data-reveal].is-visible {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) scale(1);
+    filter: blur(0);
+  }
+
+  .topbar {
+    animation: navDrop 0.7s var(--motion-spring) both;
+  }
+
+  .hero {
+    animation: heroLift 0.95s var(--motion-spring) both;
+  }
+
+  .hero-main-card h1 {
+    animation: copyLift 0.82s 0.12s var(--motion-spring) both;
+  }
+
+  .hero-main-card p {
+    animation: copyLift 0.82s 0.22s var(--motion-spring) both;
+  }
+
+  .hero-button {
+    animation: ctaLift 0.9s 0.34s var(--motion-spring) both;
+  }
+
+  .hero-side-dark {
+    animation: sideFloatIn 0.88s 0.2s var(--motion-spring) both;
+  }
+
+  .hero-side-light {
+    animation: sideFloatIn 0.88s 0.32s var(--motion-spring) both;
+  }
+
+  .hero::after {
+    animation: heroBeam 8s ease-in-out infinite;
+  }
+
+  .profile-icon::before {
+    animation: profilePulse 3.4s ease-in-out infinite;
+  }
+}
+
+.hero {
+  isolation: isolate;
+}
+
+.hero::after {
+  content: "";
+  position: absolute;
+  top: -18%;
+  left: -42%;
+  z-index: 0;
+  width: 42%;
+  height: 136%;
+  pointer-events: none;
+  background: linear-gradient(
+    105deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.02) 28%,
+    rgba(255, 255, 255, 0.17) 48%,
+    rgba(143, 202, 247, 0.08) 58%,
+    transparent 78%
+  );
+  transform: skewX(-18deg);
+  mix-blend-mode: screen;
+}
+
+.hero > * {
+  z-index: 1;
+}
+
+.topbar,
+.card,
+.auto-card,
+.catalog-toolbar,
+.partner-form,
+.register-form,
+.login-dialog,
+.partner-choice,
+.account-panel,
+.action-card,
+.benefit-strip,
+.hero-side-card {
+  transform-style: preserve-3d;
+}
+
+.hero-button,
+.more-button,
+.load-more-button,
+.catalog-apply,
+.filter-card button,
+.partner-form button,
+.register-form button,
+.modal-login-form button,
+.primary-link,
+.ui-button-primary,
+.ui-button-dark {
+  position: relative;
+  overflow: hidden;
+}
+
+.hero-button::before,
+.more-button::before,
+.load-more-button::before,
+.catalog-apply::before,
+.filter-card button::before,
+.partner-form button::before,
+.register-form button::before,
+.modal-login-form button::before,
+.primary-link::before,
+.ui-button-primary::before,
+.ui-button-dark::before {
+  content: "";
+  position: absolute;
+  inset: -40% auto -40% -55%;
+  width: 42%;
+  pointer-events: none;
+  background: linear-gradient(105deg, transparent 10%, rgba(255, 255, 255, 0.42), transparent 90%);
+  transform: skewX(-18deg);
+  opacity: 0.55;
+  animation: ctaShimmer 4.8s ease-in-out infinite;
+}
+
+.topbar::after {
+  content: "";
+  position: absolute;
+  inset: 1px;
+  z-index: -1;
+  border-radius: inherit;
+  background:
+    radial-gradient(circle at 16% 0%, rgba(255, 255, 255, 0.96), transparent 32%),
+    radial-gradient(circle at 78% 0%, rgba(143, 202, 247, 0.18), transparent 34%);
+  opacity: 0.9;
+}
+
+.topnav a,
+.nav-dropdown summary,
+.favorite-link,
+.profile-icon,
+.chips span,
+.chip-action,
+.sort-dropdown summary,
+.catalog-apply,
+.filter-card button,
+.hero-button,
+.more-button,
+.load-more-button,
+.partner-form button,
+.register-form button,
+.modal-login-form button,
+.primary-link,
+.ui-button {
+  transition:
+    transform 0.22s var(--motion-ease),
+    box-shadow 0.22s ease,
+    filter 0.22s ease,
+    background 0.22s ease,
+    color 0.18s ease,
+    border-color 0.18s ease;
+}
+
+.topnav a:hover,
+.nav-dropdown summary:hover,
+.favorite-link:hover {
+  transform: translateY(-1px);
+}
+
+.profile-icon:hover {
+  transform: translateY(-2px) scale(1.04);
+  box-shadow:
+    0 24px 44px rgba(24, 57, 82, 0.26),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+.chips span:hover,
+.chip-action:hover,
+.sort-dropdown summary:hover {
+  transform: translateY(-3px);
+  border-color: rgba(143, 202, 247, 0.5);
+  box-shadow:
+    0 24px 46px rgba(24, 57, 82, 0.13),
+    0 8px 18px rgba(24, 57, 82, 0.06),
+    inset 0 1px 0 rgba(255, 255, 255, 0.98);
+}
+
+.chip-dark:hover {
+  filter: saturate(1.08) brightness(1.03);
+}
+
+.hero-button:hover,
+.more-button:hover,
+.load-more-button:hover,
+.catalog-apply:hover,
+.filter-card button:hover,
+.partner-form button:hover,
+.register-form button:hover,
+.modal-login-form button:hover,
+.primary-link:hover,
+.ui-button-primary:hover,
+.ui-button-dark:hover {
+  transform: translateY(-5px) scale(1.012);
+  filter: saturate(1.12) brightness(1.02);
+  box-shadow:
+    0 34px 70px rgba(77, 145, 197, 0.34),
+    0 14px 32px rgba(24, 57, 82, 0.16),
+    inset 0 1px 0 rgba(255, 255, 255, 0.4);
+}
+
+.more-button:hover,
+.load-more-button:hover,
+.ui-button-dark:hover {
+  box-shadow:
+    0 36px 76px rgba(18, 45, 69, 0.32),
+    0 14px 34px rgba(18, 45, 69, 0.16),
+    inset 0 1px 0 rgba(255, 255, 255, 0.16);
+}
+
+.card:hover,
+.auto-card:hover,
+.pick-card:hover,
+.partner-choice:hover,
+.account-panel:hover,
+.action-card:hover,
+.benefit-card:hover {
+  transform: translateY(-8px);
+  border-color: rgba(255, 255, 255, 0.98);
+  box-shadow:
+    0 52px 112px rgba(18, 45, 69, 0.19),
+    0 18px 42px rgba(18, 45, 69, 0.09),
+    inset 0 1px 0 rgba(255, 255, 255, 1);
+}
+
+.hero-side-dark:hover,
+.hero-side-light:hover {
+  transform: translateY(-6px);
+}
+
+.auto-card {
+  position: relative;
+}
+
+.card,
+.catalog-toolbar,
+.partner-form,
+.register-form {
+  position: relative;
+}
+
+.auto-card::after,
+.card::after,
+.catalog-toolbar::after,
+.partner-form::after,
+.register-form::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  border-radius: inherit;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.42), transparent 38%);
+  opacity: 0;
+  transition: opacity 0.24s ease;
+}
+
+.auto-card:hover::after,
+.card:hover::after,
+.catalog-toolbar:hover::after,
+.partner-form:hover::after,
+.register-form:hover::after {
+  opacity: 1;
+}
+
+.auto-cover {
+  overflow: hidden;
+}
+
+.auto-cover::before,
+.auto-cover::after {
+  content: "";
+  position: absolute;
+  pointer-events: none;
+  transition: transform 0.42s var(--motion-ease), opacity 0.42s ease;
+}
+
+.auto-cover::before {
+  left: 9%;
+  right: 9%;
+  bottom: 20%;
+  height: 40%;
+  border-radius: 42% 58% 18px 18px;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.34), rgba(255, 255, 255, 0.06)),
+    linear-gradient(90deg, rgba(24, 57, 82, 0.08), rgba(24, 57, 82, 0.16));
+  border: 1px solid rgba(255, 255, 255, 0.24);
+}
+
+.auto-cover::after {
+  left: 15%;
+  right: 15%;
+  bottom: 15%;
+  height: 5px;
+  border-radius: 999px;
+  background: rgba(24, 57, 82, 0.14);
+  filter: blur(2px);
+  opacity: 0.65;
+}
+
+.auto-card:hover .auto-cover::before {
+  transform: translateX(3%) scale(1.045);
+}
+
+.auto-card:hover .auto-cover::after {
+  transform: scaleX(1.08);
+  opacity: 0.85;
+}
+
+.pick-card img {
+  transition: transform 0.52s var(--motion-ease), filter 0.52s ease;
+}
+
+.pick-card:hover img {
+  transform: scale(1.075);
+  filter: saturate(1.08) contrast(1.04);
+}
+
+.pick-overlay {
+  transition: background 0.32s ease;
+}
+
+.pick-card:hover .pick-overlay {
+  background: linear-gradient(180deg, rgba(12, 35, 53, 0.06), rgba(12, 35, 53, 0.22));
+}
+
+.result-item,
+.request-box,
+.auto-spec-grid {
+  transition: transform 0.24s var(--motion-ease), box-shadow 0.24s ease, border-color 0.24s ease;
+}
+
+.result-item:hover,
+.request-box:hover {
+  transform: translateX(6px);
+  border-color: rgba(143, 202, 247, 0.48);
+  box-shadow:
+    0 22px 52px rgba(24, 57, 82, 0.09),
+    inset 0 1px 0 rgba(255, 255, 255, 0.9);
+}
+
+.catalog-search-field:focus,
+.field-row input:focus,
+.select-pill:focus,
+.partner-form input:focus,
+.partner-form textarea:focus,
+.register-form input:focus,
+.modal-login-form input:focus {
+  border-color: rgba(143, 202, 247, 0.78);
+  box-shadow:
+    0 0 0 5px rgba(143, 202, 247, 0.18),
+    0 18px 36px rgba(24, 57, 82, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.92);
+}
+
+.login-modal.is-open .login-dialog {
+  animation: modalPop 0.34s var(--motion-spring) both;
+}
+
+.login-close:hover {
+  transform: rotate(90deg) scale(1.08);
+  background: #dff0fb;
+}
+
+@keyframes navDrop {
+  from {
+    opacity: 0;
+    transform: translateY(-18px) scale(0.985);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes heroLift {
+  from {
+    opacity: 0;
+    transform: translateY(28px) scale(0.985);
+    filter: blur(8px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    filter: blur(0);
+  }
+}
+
+@keyframes copyLift {
+  from {
+    opacity: 0;
+    transform: translateY(26px);
+    filter: blur(6px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+    filter: blur(0);
+  }
+}
+
+@keyframes ctaLift {
+  from {
+    opacity: 0;
+    transform: translateY(34px) scale(0.96);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes sideFloatIn {
+  from {
+    opacity: 0;
+    transform: translate3d(34px, 18px, 0) scale(0.965);
+    filter: blur(8px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) scale(1);
+    filter: blur(0);
+  }
+}
+
+@keyframes heroBeam {
+  0%,
+  24% {
+    transform: translateX(0) skewX(-18deg);
+    opacity: 0;
+  }
+
+  42% {
+    opacity: 0.82;
+  }
+
+  62%,
+  100% {
+    transform: translateX(360%) skewX(-18deg);
+    opacity: 0;
+  }
+}
+
+@keyframes profilePulse {
+  0%,
+  100% {
+    transform: translateX(-50%) scale(1);
+  }
+
+  50% {
+    transform: translateX(-50%) scale(1.08);
+  }
+}
+
+@keyframes modalPop {
+  from {
+    opacity: 0;
+    transform: translateY(24px) scale(0.94);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes ambientFloatOne {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+
+  50% {
+    transform: translate3d(-26px, 34px, 0) scale(1.08);
+  }
+}
+
+@keyframes ambientFloatTwo {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+
+  50% {
+    transform: translate3d(34px, -26px, 0) scale(1.06);
+  }
+}
+
+@keyframes ctaShimmer {
+  0%,
+  38% {
+    transform: translateX(0) skewX(-18deg);
+    opacity: 0;
+  }
+
+  50% {
+    opacity: 0.58;
+  }
+
+  68%,
+  100% {
+    transform: translateX(390%) skewX(-18deg);
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  [data-reveal] {
+    opacity: 1 !important;
+    transform: none !important;
+    filter: none !important;
+  }
 }

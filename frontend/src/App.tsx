@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { Navigate, Route, Routes, useLocation } from "react-router-dom";
 import { Layout } from "./components/Layout";
+import { useRevealOnScroll } from "./hooks/useRevealOnScroll";
 import { CabinetPage } from "./pages/CabinetPage";
 import { CatalogPage } from "./pages/CatalogPage";
 import { FavoritesPage } from "./pages/FavoritesPage";
@@ -25,6 +26,8 @@ function ScrollToHash() {
 }
 
 export function App() {
+  useRevealOnScroll();
+
   return (
     <>
       <ScrollToHash />

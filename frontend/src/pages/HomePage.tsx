@@ -61,16 +61,95 @@ const quickScenarioRows = [
   ["Проверенные продавцы", "С минимальным пробегом", "Гибриды до 2 млн ₽", "Полный привод", "Для города", "Свежие лоты"],
 ];
 
-const trustFlow = [
-  ["Цена", "Как считается цена", "Отдельно показываем цену в Китае, логистику, таможенные сборы и итог под ключ."],
-  ["Оплата", "Безопасность оплаты", "Платеж привязан к этапам сделки, статусам перевозки и подтверждению документов."],
-  ["Лот", "Проверка продавца", "У лота есть статус, рейтинг продавца, фотоотчет и отметка проверки."],
-  ["Маршрут", "Логистика и таможня", "Покупатель заранее видит маршрут, срок доставки и примерную стоимость перемещения."],
+type EngineType = "gas" | "hybrid" | "electric";
+type SupportPackage = "base" | "standard" | "premium";
+
+interface CalculatorInput {
+  chinaPrice: number;
+  engineType: EngineType;
+  power: number;
+  year: number;
+  origin: string;
+  supportPackage: SupportPackage;
+}
+
+interface CalculatorResult {
+  logistics: number;
+  customs: number;
+  service: number;
+  total: number;
+  age: number;
+}
+
+const dealRouteSteps = [
+  ["01", "Китай", "Выбираем лот, продавца и город отправления"],
+  ["02", "Проверка", "Фиксируем фотоотчет, VIN и состояние"],
+  ["03", "Расчет", "Собираем цену авто, логистику и сборы"],
+  ["04", "Доставка", "Видим маршрут и статусы перемещения"],
+  ["05", "Получение", "Передаем авто с понятной историей сделки"],
 ];
+
+const logisticsByOrigin: Record<string, number> = {
+  Шанхай: 430_000,
+  Гуанчжоу: 470_000,
+  Ханчжоу: 450_000,
+  Пекин: 490_000,
+  Шэньчжэнь: 480_000,
+};
+
+const supportPackages: Record<SupportPackage, { label: string; fee: number }> = {
+  base: { label: "Базовый контроль", fee: 85_000 },
+  standard: { label: "Оптимальный", fee: 140_000 },
+  premium: { label: "Под ключ + сопровождение", fee: 220_000 },
+};
+
+const engineOptions: Record<EngineType, { label: string; rate: number; percent: number }> = {
+  gas: { label: "Бензин", rate: 2_650, percent: 0.08 },
+  hybrid: { label: "Гибрид", rate: 2_250, percent: 0.07 },
+  electric: { label: "Электро", rate: 1_650, percent: 0.045 },
+};
+
+const defaultCalculatorInput: CalculatorInput = {
+  chinaPrice: 1_250_000,
+  engineType: "hybrid",
+  power: 180,
+  year: 2023,
+  origin: "Шанхай",
+  supportPackage: "standard",
+};
+
+const formatRub = (value: number) => new Intl.NumberFormat("ru-RU").format(Math.round(value)) + " ₽";
+
+const roundToThousand = (value: number) => Math.round(value / 1000) * 1000;
+
+function calculateTurnkeyEstimate(input: CalculatorInput): CalculatorResult {
+  const currentYear = new Date().getFullYear();
+  const age = Math.max(0, currentYear - input.year);
+  const ageFactor = age >= 4 ? 1.24 : age >= 2 ? 1.1 : 1;
+  const engine = engineOptions[input.engineType];
+  const logistics = logisticsByOrigin[input.origin] ?? logisticsByOrigin["Шанхай"];
+  const service = supportPackages[input.supportPackage].fee;
+  const customs = roundToThousand(input.power * engine.rate * ageFactor + input.chinaPrice * engine.percent);
+  const total = input.chinaPrice + logistics + customs + service;
+
+  return {
+    logistics,
+    customs,
+    service,
+    total,
+    age,
+  };
+}
 
 export function HomePage() {
   const [activeScenarioKey, setActiveScenarioKey] = useState("economy");
+  const [calculatorInput, setCalculatorInput] = useState<CalculatorInput>(defaultCalculatorInput);
   const activeScenario = scenarioPresets.find((scenario) => scenario.key === activeScenarioKey) ?? scenarioPresets[0];
+  const calculatorResult = calculateTurnkeyEstimate(calculatorInput);
+
+  const updateCalculatorInput = <Key extends keyof CalculatorInput>(key: Key, value: CalculatorInput[Key]) => {
+    setCalculatorInput((current) => ({ ...current, [key]: value }));
+  };
 
   return (
     <main>
@@ -322,23 +401,125 @@ export function HomePage() {
         </div>
       </section>
 
-      <section className="section trust-section">
-        <div className="section-header">
-          <span className="section-label">Доверие к сделке</span>
+      <section className="section trust-section deal-tools-section">
+        <div className="section-header deal-tools-header">
+          <span className="section-label">Маршрут и расчет</span>
           <h2>
-            Покупка выглядит
+            Сделка видна по шагам,
             <br />
-            предсказуемой
+            цена собирается заранее
           </h2>
         </div>
-        <div className="deal-flow">
-          {trustFlow.map(([label, title, description]) => (
-            <article className="deal-flow-step" key={label}>
-              <span className="deal-flow-mark">{label}</span>
-              <h3>{title}</h3>
-              <p>{description}</p>
-            </article>
-          ))}
+        <div className="deal-tools-grid">
+          <article className="card deal-route-card">
+            <div className="deal-route-copy">
+              <span className="card-kicker">Маршрут сделки</span>
+              <h3>От китайского лота до понятного получения в РФ</h3>
+              <p>Каждый этап показывает, что уже проверено, где автомобиль сейчас и из чего складывается итоговая стоимость.</p>
+            </div>
+            <div className="deal-route-line" aria-label="Этапы сделки">
+              {dealRouteSteps.map(([number, title, description]) => (
+                <div className="deal-route-step" key={number}>
+                  <span>{number}</span>
+                  <strong>{title}</strong>
+                  <p>{description}</p>
+                </div>
+              ))}
+            </div>
+          </article>
+
+          <article className="card turnkey-calculator">
+            <div className="calculator-heading">
+              <span className="card-kicker">Умный калькулятор</span>
+              <h3>Предварительный расчет под ключ</h3>
+              <p>Это MVP-оценка, не оферта. Точную сумму менеджер уточнит после проверки лота и маршрута.</p>
+            </div>
+
+            <div className="calculator-form">
+              <label>
+                Цена в Китае
+                <input
+                  min="0"
+                  step="50000"
+                  type="number"
+                  value={calculatorInput.chinaPrice}
+                  onChange={(event) => updateCalculatorInput("chinaPrice", Number(event.target.value))}
+                />
+              </label>
+              <label>
+                Тип двигателя
+                <select
+                  value={calculatorInput.engineType}
+                  onChange={(event) => updateCalculatorInput("engineType", event.target.value as EngineType)}
+                >
+                  {Object.entries(engineOptions).map(([value, option]) => (
+                    <option key={value} value={value}>
+                      {option.label}
+                    </option>
+                  ))}
+                </select>
+              </label>
+              <label>
+                Мощность, л.с.
+                <input
+                  min="50"
+                  step="5"
+                  type="number"
+                  value={calculatorInput.power}
+                  onChange={(event) => updateCalculatorInput("power", Number(event.target.value))}
+                />
+              </label>
+              <label>
+                Год
+                <input
+                  min="2010"
+                  max={new Date().getFullYear()}
+                  type="number"
+                  value={calculatorInput.year}
+                  onChange={(event) => updateCalculatorInput("year", Number(event.target.value))}
+                />
+              </label>
+              <label>
+                Откуда едет
+                <select
+                  value={calculatorInput.origin}
+                  onChange={(event) => updateCalculatorInput("origin", event.target.value)}
+                >
+                  {Object.keys(logisticsByOrigin).map((origin) => (
+                    <option key={origin} value={origin}>
+                      {origin}
+                    </option>
+                  ))}
+                </select>
+              </label>
+              <label>
+                Пакет
+                <select
+                  value={calculatorInput.supportPackage}
+                  onChange={(event) => updateCalculatorInput("supportPackage", event.target.value as SupportPackage)}
+                >
+                  {Object.entries(supportPackages).map(([value, option]) => (
+                    <option key={value} value={value}>
+                      {option.label}
+                    </option>
+                  ))}
+                </select>
+              </label>
+            </div>
+
+            <div className="calculator-result">
+              <div className="calculator-result-main">
+                <span>Итог под ключ</span>
+                <strong>{formatRub(calculatorResult.total)}</strong>
+              </div>
+              <div className="calculator-breakdown">
+                <span>Логистика <strong>{formatRub(calculatorResult.logistics)}</strong></span>
+                <span>Таможня и сборы <strong>{formatRub(calculatorResult.customs)}</strong></span>
+                <span>Сервис <strong>{formatRub(calculatorResult.service)}</strong></span>
+                <span>Возраст авто <strong>{calculatorResult.age} г.</strong></span>
+              </div>
+            </div>
+          </article>
         </div>
       </section>
 

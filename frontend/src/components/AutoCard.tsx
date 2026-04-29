@@ -36,7 +36,7 @@ export function AutoCard({ car, compact = false }: AutoCardProps) {
         </button>
         {car.verified && <span className="verify-pill">Проверен</span>}
         <div className="cover-route">
-          <span>Откуда едет</span>
+          <span>Откуда:</span>
           <strong>{getRouteOrigin(car)}</strong>
         </div>
       </div>

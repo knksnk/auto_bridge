@@ -1738,3 +1738,419 @@
     min-height: auto;
   }
 }
+
+/* Targeted trust/calculator redesign and header fixes. */
+.topnav a,
+.nav-dropdown-trigger,
+.favorite-link {
+  color: var(--ab-ink);
+  font-weight: 700 !important;
+}
+
+.nav-dropdown-trigger {
+  min-height: auto;
+  padding: 10px 2px;
+}
+
+.profile-trigger.profile-icon {
+  background: var(--ab-ink) !important;
+  opacity: 1;
+  filter: none;
+  box-shadow:
+    0 18px 36px rgba(24, 57, 82, 0.24),
+    inset 0 1px 0 rgba(255, 255, 255, 0.18);
+}
+
+.profile-trigger.profile-icon::before,
+.profile-trigger.profile-icon::after {
+  background: #fff !important;
+  opacity: 1;
+}
+
+.nav-dropdown,
+.profile-dropdown {
+  padding-block: 10px;
+  margin-block: -10px;
+}
+
+.nav-dropdown::after,
+.profile-dropdown::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: -24px;
+  right: -24px;
+  height: 18px;
+}
+
+.nav-dropdown-menu,
+.profile-dropdown-menu {
+  top: calc(100% + 4px) !important;
+  transition:
+    opacity 180ms ease 120ms,
+    transform 180ms ease 120ms,
+    visibility 0s linear 320ms;
+}
+
+.nav-dropdown-menu {
+  left: 50%;
+  transform: translate(-50%, 8px) scale(0.98);
+}
+
+.profile-dropdown-menu {
+  right: 0;
+  transform: translateY(8px) scale(0.98);
+}
+
+.nav-dropdown:hover .nav-dropdown-menu,
+.nav-dropdown:focus-within .nav-dropdown-menu {
+  transform: translate(-50%, 0) scale(1);
+  transition-delay: 0s;
+}
+
+.profile-dropdown:hover .profile-dropdown-menu,
+.profile-dropdown:focus-within .profile-dropdown-menu {
+  transform: translateY(0) scale(1);
+  transition-delay: 0s;
+}
+
+.cover-route {
+  position: absolute !important;
+  left: 18px !important;
+  right: auto !important;
+  bottom: 18px !important;
+  display: inline-flex !important;
+  width: auto !important;
+  max-width: calc(100% - 36px);
+  min-height: 38px;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 6px;
+  padding: 0 13px !important;
+  border: 1px solid rgba(255, 255, 255, 0.26);
+  border-radius: 999px;
+  background: rgba(18, 51, 74, 0.76);
+  color: #fff;
+  box-shadow:
+    0 14px 28px rgba(12, 34, 51, 0.22),
+    inset 0 1px 0 rgba(255, 255, 255, 0.16);
+  backdrop-filter: blur(12px);
+}
+
+.cover-route span,
+.cover-route strong {
+  margin: 0;
+  color: inherit;
+  font-size: 12px;
+  line-height: 1;
+  letter-spacing: 0;
+  text-transform: none;
+  white-space: nowrap;
+}
+
+.cover-route span {
+  font-weight: 700;
+  opacity: 0.82;
+}
+
+.cover-route strong {
+  overflow: hidden;
+  max-width: 150px;
+  text-overflow: ellipsis;
+  font-weight: 900;
+}
+
+.deal-tools-section {
+  position: relative;
+}
+
+.deal-tools-section::before {
+  content: "";
+  position: absolute;
+  inset: 6% -4% auto auto;
+  width: min(620px, 44vw);
+  height: min(620px, 44vw);
+  border-radius: 50%;
+  pointer-events: none;
+  background: radial-gradient(circle, rgba(141, 205, 248, 0.24), transparent 68%);
+  filter: blur(10px);
+}
+
+.deal-tools-header {
+  position: relative;
+  z-index: 1;
+}
+
+.deal-tools-header h2 {
+  max-width: 980px;
+  text-align: right;
+}
+
+.deal-tools-grid {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: minmax(0, 1.02fr) minmax(430px, 0.78fr);
+  gap: clamp(24px, 3vw, 48px);
+  margin-top: 52px;
+}
+
+.deal-route-card,
+.turnkey-calculator {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.88);
+  background:
+    radial-gradient(circle at 8% 0%, rgba(141, 205, 248, 0.2), transparent 32%),
+    linear-gradient(145deg, rgba(255, 255, 255, 0.98), rgba(246, 252, 255, 0.9));
+  box-shadow:
+    0 30px 80px rgba(24, 57, 82, 0.12),
+    inset 0 1px 0 rgba(255, 255, 255, 0.96);
+}
+
+.deal-route-card {
+  min-height: 520px;
+  padding: clamp(30px, 3vw, 48px);
+}
+
+.deal-route-card::after {
+  content: "";
+  position: absolute;
+  right: -18%;
+  bottom: -26%;
+  width: 55%;
+  height: 70%;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(24, 57, 82, 0.12), transparent 68%);
+}
+
+.deal-route-copy {
+  position: relative;
+  z-index: 1;
+  max-width: 720px;
+}
+
+.deal-route-copy h3,
+.calculator-heading h3 {
+  margin: 18px 0 0;
+  color: var(--ab-ink);
+  font-size: clamp(34px, 3vw, 58px);
+  line-height: 0.98;
+  letter-spacing: -0.055em;
+}
+
+.deal-route-copy p,
+.calculator-heading p {
+  margin: 18px 0 0;
+  color: var(--ab-muted);
+  font-size: clamp(17px, 1.25vw, 22px);
+  line-height: 1.36;
+}
+
+.deal-route-line {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 14px;
+  margin-top: clamp(46px, 5vw, 86px);
+}
+
+.deal-route-line::before {
+  content: "";
+  position: absolute;
+  top: 34px;
+  left: 5%;
+  right: 5%;
+  height: 3px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, rgba(109, 183, 234, 0.08), rgba(109, 183, 234, 0.82), rgba(24, 57, 82, 0.28));
+}
+
+.deal-route-step {
+  position: relative;
+  display: grid;
+  gap: 12px;
+  align-content: start;
+  min-height: 210px;
+  padding: 0 10px;
+}
+
+.deal-route-step span {
+  display: inline-flex;
+  width: 68px;
+  height: 68px;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgba(255, 255, 255, 0.9);
+  border-radius: 50%;
+  background: linear-gradient(145deg, #eef8ff, #fff);
+  color: var(--ab-ink);
+  font-size: 18px;
+  font-weight: 900;
+  box-shadow:
+    0 18px 38px rgba(24, 57, 82, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 1);
+}
+
+.deal-route-step strong {
+  color: var(--ab-ink);
+  font-size: clamp(20px, 1.6vw, 30px);
+  line-height: 1.04;
+  letter-spacing: -0.04em;
+}
+
+.deal-route-step p {
+  margin: 0;
+  color: var(--ab-muted);
+  font-size: 15px;
+  line-height: 1.34;
+}
+
+.turnkey-calculator {
+  padding: clamp(28px, 2.8vw, 42px);
+}
+
+.calculator-form {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+  margin-top: 28px;
+}
+
+.calculator-form label {
+  display: grid;
+  gap: 9px;
+  color: var(--ab-muted);
+  font-size: 13px;
+  font-weight: 900;
+}
+
+.calculator-form input,
+.calculator-form select {
+  width: 100%;
+  min-height: 54px;
+  padding: 0 16px;
+  border: 1px solid rgba(24, 57, 82, 0.08);
+  border-radius: 18px;
+  background: linear-gradient(180deg, #eef8ff, #f8fcff);
+  color: var(--ab-ink);
+  font: inherit;
+  font-size: 15px;
+  font-weight: 800;
+  outline: none;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.9);
+  transition: border-color 160ms ease, box-shadow 160ms ease, transform 160ms ease;
+}
+
+.calculator-form input:focus,
+.calculator-form select:focus {
+  border-color: rgba(109, 183, 234, 0.8);
+  box-shadow:
+    0 0 0 4px rgba(109, 183, 234, 0.16),
+    inset 0 1px 0 rgba(255, 255, 255, 0.96);
+}
+
+.calculator-result {
+  display: grid;
+  gap: 18px;
+  margin-top: 26px;
+  padding: 22px;
+  border-radius: 28px;
+  background:
+    radial-gradient(circle at 0% 0%, rgba(141, 205, 248, 0.28), transparent 44%),
+    linear-gradient(145deg, var(--ab-ink), #214b68);
+  color: #fff;
+  box-shadow:
+    0 22px 46px rgba(24, 57, 82, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.18);
+}
+
+.calculator-result-main {
+  display: grid;
+  gap: 6px;
+}
+
+.calculator-result-main span {
+  color: rgba(255, 255, 255, 0.76);
+  font-size: 14px;
+  font-weight: 900;
+}
+
+.calculator-result-main strong {
+  font-size: clamp(36px, 4vw, 64px);
+  line-height: 0.95;
+  letter-spacing: -0.06em;
+}
+
+.calculator-breakdown {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.calculator-breakdown span {
+  display: grid;
+  gap: 5px;
+  min-height: 74px;
+  padding: 13px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.08);
+  color: rgba(255, 255, 255, 0.72);
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.calculator-breakdown strong {
+  color: #fff;
+  font-size: 16px;
+  line-height: 1.1;
+}
+
+@media (max-width: 1180px) {
+  .deal-tools-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .deal-tools-header h2 {
+    text-align: left;
+  }
+}
+
+@media (max-width: 760px) {
+  .deal-route-card,
+  .turnkey-calculator {
+    padding: 24px;
+    border-radius: 30px;
+  }
+
+  .deal-route-line,
+  .calculator-form,
+  .calculator-breakdown {
+    grid-template-columns: 1fr;
+  }
+
+  .deal-route-line::before {
+    top: 0;
+    bottom: 0;
+    left: 34px;
+    right: auto;
+    width: 3px;
+    height: auto;
+  }
+
+  .deal-route-step {
+    min-height: auto;
+    grid-template-columns: 68px 1fr;
+    column-gap: 18px;
+  }
+
+  .deal-route-step p {
+    grid-column: 2;
+  }
+
+  .calculator-result-main strong {
+    font-size: 38px;
+  }
+}

@@ -1,26 +1,77 @@
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import { AutoCard } from "../components/AutoCard";
-import { catalogCars, collectionCards, quickScenarios } from "../data/mockCars";
+import { catalogCars, collectionCards } from "../data/mockCars";
 
-const scenarioResults = [
+const scenarioPresets = [
   {
-    title: "Geely Emgrand",
-    price: "Цена в Китае от 730 000 ₽, под ключ от 1 290 000 ₽",
-    meta: ["низкий расход топлива", "10 предложений"],
+    key: "family",
+    label: "Для семьи",
+    request: "Нужен семейный кроссовер с безопасностью, просторным салоном и понятной ценой под ключ",
+    results: [
+      { title: "Geely Monjaro", price: "Цена в Китае от 1 920 000 ₽, под ключ от 2 640 000 ₽", meta: ["полный привод", "8 предложений"] },
+      { title: "Haval Jolion", price: "Цена в Китае от 1 010 300 ₽, под ключ от 1 536 852 ₽", meta: ["семейный", "12 предложений"] },
+      { title: "Chery Tiggo 7 Pro", price: "Цена в Китае от 1 240 000 ₽, под ключ от 1 890 000 ₽", meta: ["кроссовер", "9 предложений"] },
+    ],
   },
   {
-    title: "Changan Alsvin",
-    price: "Цена в Китае от 850 000 ₽, под ключ от 1 100 000 ₽",
-    meta: ["доступный сегмент", "6 предложений"],
+    key: "city",
+    label: "Для города",
+    request: "Нужно компактное авто для города с небольшим расходом, легкой парковкой и доступным обслуживанием",
+    results: [
+      { title: "Changan Alsvin", price: "Цена в Китае от 650 000 ₽, под ключ от 1 180 000 ₽", meta: ["городской", "6 предложений"] },
+      { title: "BYD Qin Plus DM-i", price: "Цена в Китае от 1 100 000 ₽, под ключ от 1 670 000 ₽", meta: ["гибрид", "11 предложений"] },
+      { title: "Geely Emgrand", price: "Цена в Китае от 730 000 ₽, под ключ от 1 290 000 ₽", meta: ["седан", "10 предложений"] },
+    ],
   },
   {
-    title: "BYD Qin Plus DM-i",
-    price: "Цена в Китае от 1 100 000 ₽, под ключ от 1 670 000 ₽",
-    meta: ["гибрид", "11 предложений"],
+    key: "budget",
+    label: "До 2 млн ₽",
+    request: "Подберите авто до 2 млн ₽ под ключ с проверенным лотом и без сюрпризов по логистике",
+    results: [
+      { title: "Haval Jolion", price: "Цена в Китае от 1 010 300 ₽, под ключ от 1 536 852 ₽", meta: ["до 2 млн ₽", "проверен"] },
+      { title: "Chery Tiggo 7 Pro", price: "Цена в Китае от 1 240 000 ₽, под ключ от 1 890 000 ₽", meta: ["кроссовер", "7 предложений"] },
+      { title: "Changan Alsvin", price: "Цена в Китае от 650 000 ₽, под ключ от 1 180 000 ₽", meta: ["доступный сегмент", "6 предложений"] },
+    ],
+  },
+  {
+    key: "economy",
+    label: "Экономичный",
+    request: "Нужно авто с хорошей экономией при покупке и разумными затратами на обслуживание",
+    results: [
+      { title: "Geely Emgrand", price: "Цена в Китае от 730 000 ₽, под ключ от 1 290 000 ₽", meta: ["низкий расход топлива", "10 предложений"] },
+      { title: "Changan Alsvin", price: "Цена в Китае от 850 000 ₽, под ключ от 1 100 000 ₽", meta: ["доступный сегмент", "6 предложений"] },
+      { title: "BYD Qin Plus DM-i", price: "Цена в Китае от 1 100 000 ₽, под ключ от 1 670 000 ₽", meta: ["гибрид", "11 предложений"] },
+    ],
+  },
+  {
+    key: "electric",
+    label: "Электро",
+    request: "Интересует электромобиль с проверенной батареей, понятной доставкой и запасом хода для города",
+    results: [
+      { title: "Zeekr X", price: "Цена в Китае от 2 780 000 ₽, под ключ от 3 450 000 ₽", meta: ["электро", "новое"] },
+      { title: "BYD Dolphin", price: "Цена в Китае от 1 340 000 ₽, под ключ от 2 020 000 ₽", meta: ["городской EV", "5 предложений"] },
+      { title: "Geely Geometry C", price: "Цена в Китае от 1 560 000 ₽, под ключ от 2 240 000 ₽", meta: ["проверка батареи", "4 предложения"] },
+    ],
   },
 ];
 
+const quickScenarioRows = [
+  ["Авто до 1.5 млн ₽", "Семейные кроссоверы", "Седаны до 3 лет", "Электромобили", "Популярно в РФ", "Недавно на сайте"],
+  ["Проверенные продавцы", "С минимальным пробегом", "Гибриды до 2 млн ₽", "Полный привод", "Для города", "Свежие лоты"],
+];
+
+const trustFlow = [
+  ["Цена", "Как считается цена", "Отдельно показываем цену в Китае, логистику, таможенные сборы и итог под ключ."],
+  ["Оплата", "Безопасность оплаты", "Платеж привязан к этапам сделки, статусам перевозки и подтверждению документов."],
+  ["Лот", "Проверка продавца", "У лота есть статус, рейтинг продавца, фотоотчет и отметка проверки."],
+  ["Маршрут", "Логистика и таможня", "Покупатель заранее видит маршрут, срок доставки и примерную стоимость перемещения."],
+];
+
 export function HomePage() {
+  const [activeScenarioKey, setActiveScenarioKey] = useState("economy");
+  const activeScenario = scenarioPresets.find((scenario) => scenario.key === activeScenarioKey) ?? scenarioPresets[0];
+
   return (
     <main>
       <section className="hero">
@@ -86,11 +137,17 @@ export function HomePage() {
           <h2>Готовые сценарии поиска</h2>
         </div>
 
-        <div className="chips quick-chips">
-          {quickScenarios.map((scenario) => (
-            <Link key={scenario} to={`/catalog?scenario=${encodeURIComponent(scenario)}`}>
-              {scenario}
-            </Link>
+        <div className="quick-marquee" aria-label="Готовые сценарии поиска">
+          {quickScenarioRows.map((row, rowIndex) => (
+            <div className={`quick-marquee-row quick-marquee-row-${rowIndex + 1}`} key={row.join("-")}>
+              <div className="quick-marquee-track">
+                {[...row, ...row].map((scenario, index) => (
+                  <Link key={`${scenario}-${index}`} to={`/catalog?scenario=${encodeURIComponent(scenario)}`}>
+                    {scenario}
+                  </Link>
+                ))}
+              </div>
+            </div>
           ))}
         </div>
 
@@ -114,22 +171,27 @@ export function HomePage() {
               из вариантов.
             </p>
             <div className="scenario-input">Введите запрос или попробуйте готовые сценарии</div>
-            <div className="chips chips-small">
-              <span>Для семьи</span>
-              <span>Для города</span>
-              <span>До 2 млн ₽</span>
-              <span className="chip-dark">Экономичный</span>
-              <span>Электро</span>
+            <div className="chips chips-small scenario-options" role="list" aria-label="Сценарии ИИ-подбора">
+              {scenarioPresets.map((scenario) => (
+                <button
+                  className={`scenario-option ${scenario.key === activeScenarioKey ? "is-active chip-dark" : ""}`}
+                  type="button"
+                  key={scenario.key}
+                  onClick={() => setActiveScenarioKey(scenario.key)}
+                >
+                  {scenario.label}
+                </button>
+              ))}
             </div>
           </article>
 
           <article className="card scenario-results">
             <div className="request-box">
               <span className="card-kicker">Запрос</span>
-              <p>Нужно авто с хорошей экономией при покупке и разумными затратами на обслуживание</p>
+              <p>{activeScenario.request}</p>
             </div>
 
-            {scenarioResults.map((item) => (
+            {activeScenario.results.map((item) => (
               <div className="result-item" key={item.title}>
                 <h4>{item.title}</h4>
                 <p>{item.price}</p>
@@ -145,9 +207,9 @@ export function HomePage() {
               <Link className="chip-action chip-action-blue" to="/catalog">
                 Открыть все результаты
               </Link>
-              <button className="chip-action" type="button">
+              <Link className="chip-action" to="/#how">
                 Как считается цена
-              </button>
+              </Link>
             </div>
           </article>
         </div>
@@ -169,8 +231,9 @@ export function HomePage() {
               </div>
             </article>
           ))}
-          <Link className="catalog-link" to="/catalog">
-            Смотреть каталог
+          <Link className="catalog-link" to="/catalog" aria-label="Смотреть каталог">
+            <span>Смотреть каталог</span>
+            <span className="catalog-link-arrow" aria-hidden="true" />
           </Link>
         </div>
       </section>
@@ -268,15 +331,10 @@ export function HomePage() {
             предсказуемой
           </h2>
         </div>
-        <div className="trust-grid">
-          {[
-            ["01", "Как считается цена", "Отдельно показываем цену в Китае, логистику, таможенные сборы и итог под ключ."],
-            ["02", "Безопасность оплаты", "Платеж привязан к этапам сделки, статусам перевозки и подтверждению документов."],
-            ["03", "Проверка продавца", "У лота есть статус, рейтинг продавца, фотоотчет и отметка проверки."],
-            ["04", "Логистика и таможня", "Покупатель заранее видит маршрут, срок доставки и примерную стоимость перемещения."],
-          ].map(([number, title, description]) => (
-            <article className="card trust-card" key={number}>
-              <span>{number}</span>
+        <div className="deal-flow">
+          {trustFlow.map(([label, title, description]) => (
+            <article className="deal-flow-step" key={label}>
+              <span className="deal-flow-mark">{label}</span>
               <h3>{title}</h3>
               <p>{description}</p>
             </article>

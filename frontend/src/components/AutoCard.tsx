@@ -13,6 +13,11 @@ const coverClass = {
   soft: "auto-cover auto-cover-soft",
 };
 
+const getRouteOrigin = (car: CarListing) => {
+  const route = car.route ?? car.city;
+  return route.split("→")[0]?.trim() || route;
+};
+
 export function AutoCard({ car, compact = false }: AutoCardProps) {
   const { isFavorite, isCompared, toggleFavorite, toggleCompare } = useMarketplace();
   const favorite = isFavorite(car.id);
@@ -31,8 +36,8 @@ export function AutoCard({ car, compact = false }: AutoCardProps) {
         </button>
         {car.verified && <span className="verify-pill">Проверен</span>}
         <div className="cover-route">
-          <span>{car.city}</span>
-          <strong>{car.deliveryTime}</strong>
+          <span>Откуда едет</span>
+          <strong>{getRouteOrigin(car)}</strong>
         </div>
       </div>
       <div className="auto-body">

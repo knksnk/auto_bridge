@@ -1342,3 +1342,399 @@
     grid-template-columns: 1fr;
   }
 }
+
+/* Targeted UI refinements after the product/backend milestone. */
+@media (min-width: 901px) {
+  .hero {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(420px, 0.62fr);
+    grid-template-rows: minmax(300px, 1fr) auto;
+    gap: clamp(22px, 2.2vw, 42px);
+    align-items: stretch;
+    min-height: clamp(780px, 48vw, 940px);
+    padding: clamp(64px, 4.8vw, 92px);
+  }
+
+  .hero-main-card,
+  .hero-side-card,
+  .hero-route-widget,
+  .hero-button {
+    position: relative !important;
+    top: auto !important;
+    right: auto !important;
+    bottom: auto !important;
+    left: auto !important;
+  }
+
+  .hero-main-card {
+    display: grid;
+    grid-column: 1;
+    grid-row: 1 / 3;
+    grid-template-rows: auto auto 1fr auto;
+    width: 100%;
+    height: 100%;
+    min-height: 0;
+    padding: 0;
+    background: transparent;
+    box-shadow: none;
+    backdrop-filter: none;
+  }
+
+  .hero-main-card h1 {
+    max-width: min(940px, 58vw);
+  }
+
+  .hero-main-card p {
+    max-width: 680px;
+    margin-top: clamp(26px, 2.2vw, 42px);
+  }
+
+  .hero-route-widget {
+    grid-column: 1;
+    grid-row: 1 / 3;
+    z-index: 2;
+    align-self: end;
+    justify-self: start;
+    width: min(620px, 72%);
+    margin: 0 0 clamp(242px, 16vw, 318px);
+    transform: none;
+  }
+
+  .hero-button {
+    grid-row: 4;
+    z-index: 3;
+    align-self: end;
+    width: min(690px, 82%);
+  }
+
+  .hero-trust-row {
+    grid-row: 3;
+    align-self: end;
+    margin: clamp(26px, 2vw, 36px) 0 clamp(22px, 1.8vw, 34px);
+  }
+
+  .hero-side-dark {
+    grid-column: 2;
+    grid-row: 1;
+    align-self: start;
+    width: 100%;
+    max-width: 680px;
+    margin-left: auto;
+  }
+
+  .hero-side-light {
+    grid-column: 2;
+    grid-row: 2;
+    align-self: end;
+    width: 100%;
+    max-width: 680px;
+    margin-left: auto;
+  }
+
+  .hero-button,
+  .hero-side-light {
+    min-height: clamp(150px, 10vw, 210px);
+  }
+}
+
+.quick-marquee {
+  display: grid;
+  gap: 28px;
+  width: 100%;
+  overflow: hidden;
+  margin-top: 42px;
+  padding: 6px 0 12px;
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+  mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+}
+
+.quick-marquee-row {
+  overflow: hidden;
+}
+
+.quick-marquee-track {
+  display: flex;
+  width: max-content;
+  gap: clamp(22px, 3vw, 56px);
+  animation: quickMarquee 32s linear infinite;
+  will-change: transform;
+}
+
+.quick-marquee-row-2 .quick-marquee-track {
+  animation-duration: 42s;
+  animation-direction: reverse;
+}
+
+.quick-marquee:hover .quick-marquee-track {
+  animation-play-state: paused;
+}
+
+.quick-marquee a,
+.scenario-option {
+  display: inline-flex;
+  min-height: 64px;
+  align-items: center;
+  justify-content: center;
+  padding: 0 clamp(24px, 2.2vw, 42px);
+  border-radius: 999px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.99), rgba(248, 252, 255, 0.94));
+  border: 1px solid rgba(255, 255, 255, 0.94);
+  color: var(--ab-ink);
+  font-size: clamp(18px, 1.2vw, 25px);
+  font-weight: 900;
+  line-height: 1;
+  text-decoration: none;
+  white-space: nowrap;
+  box-shadow:
+    0 18px 40px rgba(24, 57, 82, 0.09),
+    inset 0 1px 0 rgba(255, 255, 255, 0.98);
+}
+
+.scenario-option {
+  border: 0;
+  cursor: pointer;
+  transition: transform 180ms ease, box-shadow 180ms ease, background 180ms ease;
+}
+
+.scenario-option:hover,
+.scenario-option.is-active {
+  transform: translateY(-2px);
+}
+
+.scenario-options {
+  align-items: flex-start;
+}
+
+.scenario-options .scenario-option.is-active {
+  color: #fff;
+}
+
+.catalog-link {
+  display: inline-grid;
+  grid-template-columns: auto minmax(190px, 260px);
+  gap: 42px;
+  align-items: center;
+  width: fit-content;
+  min-width: min(100%, 620px);
+}
+
+.catalog-link::before,
+.catalog-link::after {
+  display: none !important;
+}
+
+.catalog-link-arrow {
+  position: relative;
+  display: block;
+  height: 4px;
+  width: 100%;
+  border-radius: 999px;
+  background: var(--ab-ink);
+}
+
+.catalog-link-arrow::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  right: 0;
+  width: 32px;
+  height: 32px;
+  border-top: 4px solid var(--ab-ink);
+  border-right: 4px solid var(--ab-ink);
+  transform: translateY(-50%) rotate(45deg);
+  transform-origin: center;
+}
+
+.auto-price-grid {
+  gap: 12px !important;
+  overflow: hidden;
+}
+
+.auto-price-grid > span {
+  min-width: 0;
+  overflow: hidden;
+}
+
+.auto-price-grid strong {
+  display: block;
+  max-width: 100%;
+  overflow: hidden;
+  font-size: clamp(18px, 1.05vw, 24px) !important;
+  line-height: 1.05;
+  letter-spacing: -0.04em;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.auto-card-compact .auto-price-grid strong {
+  font-size: clamp(16px, 0.95vw, 21px) !important;
+}
+
+.cover-route {
+  display: inline-grid !important;
+  grid-template-columns: 1fr !important;
+  justify-items: start;
+  gap: 6px;
+}
+
+.cover-route strong {
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.deal-flow {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 22px;
+  margin-top: 54px;
+}
+
+.deal-flow::before {
+  content: "";
+  position: absolute;
+  top: 48px;
+  left: 6%;
+  right: 6%;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, rgba(24, 57, 82, 0.2), transparent);
+}
+
+.deal-flow-step {
+  position: relative;
+  z-index: 1;
+  min-height: 300px;
+  padding: 30px;
+  border-radius: 38px;
+  background:
+    radial-gradient(circle at 22% 8%, rgba(141, 205, 248, 0.23), transparent 34%),
+    linear-gradient(145deg, rgba(255, 255, 255, 0.98), rgba(248, 252, 255, 0.9));
+  border: 1px solid rgba(255, 255, 255, 0.9);
+  box-shadow: var(--ab-shadow-md);
+}
+
+.deal-flow-mark {
+  display: inline-flex;
+  min-height: 54px;
+  align-items: center;
+  justify-content: center;
+  padding: 0 20px;
+  border-radius: 999px;
+  background: #e8f5ff;
+  color: var(--ab-ink);
+  font-size: 16px;
+  font-weight: 900;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.95);
+}
+
+.deal-flow-step h3 {
+  margin: 58px 0 0;
+  color: var(--ab-ink);
+  font-size: clamp(25px, 2vw, 34px);
+  line-height: 1.05;
+  letter-spacing: -0.045em;
+}
+
+.deal-flow-step p {
+  margin: 16px 0 0;
+  color: var(--ab-muted);
+  font-size: 17px;
+  line-height: 1.42;
+}
+
+.nav-dropdown,
+.profile-dropdown {
+  position: relative;
+}
+
+.nav-dropdown-trigger,
+.profile-trigger {
+  border: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+}
+
+.nav-dropdown-trigger {
+  display: inline-flex;
+  min-height: 42px;
+  align-items: center;
+  padding: 0 12px;
+  border-radius: 999px;
+  color: var(--ab-ink);
+  font-weight: 900;
+}
+
+.nav-dropdown-menu,
+.profile-dropdown-menu {
+  display: grid !important;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transform: translateY(10px);
+  transition: opacity 160ms ease, transform 160ms ease, visibility 160ms ease;
+}
+
+.nav-dropdown:hover .nav-dropdown-menu,
+.nav-dropdown:focus-within .nav-dropdown-menu,
+.profile-dropdown:hover .profile-dropdown-menu,
+.profile-dropdown:focus-within .profile-dropdown-menu {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  transform: translateY(0);
+}
+
+@keyframes quickMarquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@media (max-width: 1100px) {
+  .deal-flow {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .deal-flow::before {
+    display: none;
+  }
+}
+
+@media (max-width: 760px) {
+  .quick-marquee {
+    gap: 16px;
+    margin-top: 28px;
+  }
+
+  .quick-marquee a,
+  .scenario-option {
+    min-height: 50px;
+    padding: 0 20px;
+    font-size: 15px;
+  }
+
+  .catalog-link {
+    grid-template-columns: 1fr;
+    gap: 22px;
+    min-width: 0;
+  }
+
+  .catalog-link-arrow {
+    width: min(240px, 70vw);
+  }
+
+  .deal-flow {
+    grid-template-columns: 1fr;
+  }
+
+  .deal-flow-step {
+    min-height: auto;
+  }
+}

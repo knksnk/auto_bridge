@@ -22,13 +22,15 @@ export function Header({ onLoginClick }: HeaderProps) {
         <nav className="topnav">
           <NavLink to="/catalog">Каталог</NavLink>
           <Link to="/#how">Как это работает</Link>
-          <details className="nav-dropdown">
-            <summary>Для партнеров</summary>
+          <div className="nav-dropdown">
+            <button className="nav-dropdown-trigger" type="button">
+              Для партнеров
+            </button>
             <div className="nav-dropdown-menu">
               <Link to="/seller">Продавцам</Link>
               <Link to="/carrier">Перевозчикам</Link>
             </div>
-          </details>
+          </div>
           <Link to="/">О нас</Link>
         </nav>
         <div className={`topbar-search ${isSearchOpen ? "is-search-open" : ""}`}>
@@ -67,8 +69,8 @@ export function Header({ onLoginClick }: HeaderProps) {
           Избранное
           <span>{favoriteIds.length}</span>
         </Link>
-        <details className="profile-dropdown">
-          <summary className="icon profile-icon" aria-label="Личный кабинет" />
+        <div className="profile-dropdown">
+          <button className="icon profile-icon profile-trigger" type="button" aria-label="Личный кабинет" />
           <div className="profile-dropdown-menu">
             <button className="menu-button" type="button" onClick={onLoginClick}>
               Войти
@@ -76,7 +78,7 @@ export function Header({ onLoginClick }: HeaderProps) {
             <Link to="/auth">Регистрация</Link>
             <Link to="/admin">Админка</Link>
           </div>
-        </details>
+        </div>
       </header>
       <nav className="mobile-bottom-nav" aria-label="Быстрая навигация">
         <NavLink to="/catalog">Каталог</NavLink>

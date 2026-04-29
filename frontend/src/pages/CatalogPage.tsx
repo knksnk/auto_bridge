@@ -21,6 +21,18 @@ const initialFilters: CatalogFiltersState = {
   drive: "",
 };
 
+const filterKeys = Object.keys(initialFilters) as Array<keyof CatalogFiltersState>;
+
+const filtersFromSearchParams = (params: URLSearchParams): CatalogFiltersState => {
+  return filterKeys.reduce<CatalogFiltersState>(
+    (result, key) => ({
+      ...result,
+      [key]: params.get(key) ?? "",
+    }),
+    { ...initialFilters },
+  );
+};
+
 const filterLabels: Partial<Record<keyof CatalogFiltersState, string>> = {
   chinaPriceFrom: "Цена в Китае от",
   chinaPriceTo: "Цена в Китае до",
@@ -53,7 +65,7 @@ function CatalogSkeleton() {
 
 export function CatalogPage() {
   const [searchParams, setSearchParams] = useSearchParams();
-  const [filters, setFilters] = useState(initialFilters);
+  const [filters, setFilters] = useState(() => filtersFromSearchParams(searchParams));
   const [search, setSearch] = useState(searchParams.get("search") ?? "");
   const [selectedSort, setSelectedSort] = useState<SortOption>(sortOptions[0]);
   const [cars, setCars] = useState<CarListing[]>([]);

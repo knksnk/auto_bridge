@@ -21,6 +21,7 @@ export function Header({ onLoginClick }: HeaderProps) {
         </Link>
         <nav className="topnav">
           <NavLink to="/catalog">Каталог</NavLink>
+          <NavLink to="/chats">Чаты</NavLink>
           <Link to="/#how">Как это работает</Link>
           <div className="nav-dropdown">
             <button className="nav-dropdown-trigger" type="button">
@@ -82,6 +83,7 @@ export function Header({ onLoginClick }: HeaderProps) {
       </header>
       <nav className="mobile-bottom-nav" aria-label="Быстрая навигация">
         <NavLink to="/catalog">Каталог</NavLink>
+        <NavLink to="/chats">Чаты</NavLink>
         <NavLink to="/favorites">Избранное {favoriteIds.length}</NavLink>
         <NavLink to="/#how">Как работает</NavLink>
         <button type="button" onClick={onLoginClick}>

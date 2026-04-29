@@ -62,7 +62,6 @@ const quickScenarioRows = [
 ];
 
 type EngineType = "gas" | "hybrid" | "electric";
-type SupportPackage = "base" | "standard" | "premium";
 
 interface CalculatorInput {
   chinaPrice: number;
@@ -70,7 +69,8 @@ interface CalculatorInput {
   power: number;
   year: number;
   origin: string;
-  supportPackage: SupportPackage;
+  destination: string;
+  transportationNeeded: boolean;
 }
 
 interface CalculatorResult {
@@ -81,14 +81,6 @@ interface CalculatorResult {
   age: number;
 }
 
-const dealRouteSteps = [
-  ["01", "Китай", "Выбираем лот, продавца и город отправления"],
-  ["02", "Проверка", "Фиксируем фотоотчет, VIN и состояние"],
-  ["03", "Расчет", "Собираем цену авто, логистику и сборы"],
-  ["04", "Доставка", "Видим маршрут и статусы перемещения"],
-  ["05", "Получение", "Передаем авто с понятной историей сделки"],
-];
-
 const logisticsByOrigin: Record<string, number> = {
   Шанхай: 430_000,
   Гуанчжоу: 470_000,
@@ -97,10 +89,12 @@ const logisticsByOrigin: Record<string, number> = {
   Шэньчжэнь: 480_000,
 };
 
-const supportPackages: Record<SupportPackage, { label: string; fee: number }> = {
-  base: { label: "Базовый контроль", fee: 85_000 },
-  standard: { label: "Оптимальный", fee: 140_000 },
-  premium: { label: "Под ключ + сопровождение", fee: 220_000 },
+const logisticsByDestination: Record<string, number> = {
+  Москва: 0,
+  "Санкт-Петербург": 60_000,
+  Казань: 45_000,
+  Екатеринбург: 80_000,
+  Краснодар: 70_000,
 };
 
 const engineOptions: Record<EngineType, { label: string; rate: number; percent: number }> = {
@@ -115,7 +109,8 @@ const defaultCalculatorInput: CalculatorInput = {
   power: 180,
   year: 2023,
   origin: "Шанхай",
-  supportPackage: "standard",
+  destination: "Москва",
+  transportationNeeded: true,
 };
 
 const formatRub = (value: number) => new Intl.NumberFormat("ru-RU").format(Math.round(value)) + " ₽";
@@ -127,8 +122,11 @@ function calculateTurnkeyEstimate(input: CalculatorInput): CalculatorResult {
   const age = Math.max(0, currentYear - input.year);
   const ageFactor = age >= 4 ? 1.24 : age >= 2 ? 1.1 : 1;
   const engine = engineOptions[input.engineType];
-  const logistics = logisticsByOrigin[input.origin] ?? logisticsByOrigin["Шанхай"];
-  const service = supportPackages[input.supportPackage].fee;
+  const logistics = input.transportationNeeded
+    ? (logisticsByOrigin[input.origin] ?? logisticsByOrigin["Шанхай"]) +
+      (logisticsByDestination[input.destination] ?? logisticsByDestination["Москва"])
+    : 0;
+  const service = 140_000;
   const customs = roundToThousand(input.power * engine.rate * ageFactor + input.chinaPrice * engine.percent);
   const total = input.chinaPrice + logistics + customs + service;
 
@@ -143,8 +141,10 @@ function calculateTurnkeyEstimate(input: CalculatorInput): CalculatorResult {
 
 export function HomePage() {
   const [activeScenarioKey, setActiveScenarioKey] = useState("economy");
+  const [customScenarioText, setCustomScenarioText] = useState("");
   const [calculatorInput, setCalculatorInput] = useState<CalculatorInput>(defaultCalculatorInput);
   const activeScenario = scenarioPresets.find((scenario) => scenario.key === activeScenarioKey) ?? scenarioPresets[0];
+  const scenarioRequest = customScenarioText.trim() || activeScenario.request;
   const calculatorResult = calculateTurnkeyEstimate(calculatorInput);
 
   const updateCalculatorInput = <Key extends keyof CalculatorInput>(key: Key, value: CalculatorInput[Key]) => {
@@ -249,14 +249,23 @@ export function HomePage() {
               <br />
               из вариантов.
             </p>
-            <div className="scenario-input">Введите запрос или попробуйте готовые сценарии</div>
+            <input
+              className="scenario-input"
+              type="text"
+              value={customScenarioText}
+              placeholder="Введите запрос или попробуйте готовые сценарии"
+              onChange={(event) => setCustomScenarioText(event.target.value)}
+            />
             <div className="chips chips-small scenario-options" role="list" aria-label="Сценарии ИИ-подбора">
               {scenarioPresets.map((scenario) => (
                 <button
                   className={`scenario-option ${scenario.key === activeScenarioKey ? "is-active chip-dark" : ""}`}
                   type="button"
                   key={scenario.key}
-                  onClick={() => setActiveScenarioKey(scenario.key)}
+                  onClick={() => {
+                    setActiveScenarioKey(scenario.key);
+                    setCustomScenarioText("");
+                  }}
                 >
                   {scenario.label}
                 </button>
@@ -267,7 +276,7 @@ export function HomePage() {
           <article className="card scenario-results">
             <div className="request-box">
               <span className="card-kicker">Запрос</span>
-              <p>{activeScenario.request}</p>
+              <p>{scenarioRequest}</p>
             </div>
 
             {activeScenario.results.map((item) => (
@@ -330,21 +339,33 @@ export function HomePage() {
         <div className="listing-layout">
           <aside className="card filter-card">
             <h3>Фильтры</h3>
-            {["Цена в Китае", "Цена под ключ", "Год", "Мощность"].map((label) => (
+            {[
+              ["Цена в Китае", "chinaPriceTo=1500000"],
+              ["Цена под ключ", "turnkeyPriceTo=2000000"],
+              ["Год", "yearFrom=2023"],
+              ["Мощность", "scenario=Мощные авто"],
+            ].map(([label, query]) => (
               <div className="filter-group" key={label}>
                 <label>{label}</label>
-                <div className="field-row">
+                <Link className="field-row filter-link-row" to={`/catalog?${query}`}>
                   <span>от</span>
                   <span>до</span>
-                </div>
+                </Link>
               </div>
             ))}
-            {["Тип кузова", "Марка", "Двигатель", "Привод"].map((label) => (
-              <div className="select-pill" key={label}>
+            {[
+              ["Тип кузова", "bodyType=Кроссовер 5 дв."],
+              ["Марка", "brand=Geely"],
+              ["Двигатель", "engine=Гибрид"],
+              ["Привод", "drive=Полный привод"],
+            ].map(([label, query]) => (
+              <Link className="select-pill filter-link-pill" to={`/catalog?${query}`} key={label}>
                 {label}
-              </div>
+              </Link>
             ))}
-            <button type="button">Применить</button>
+            <Link className="filter-apply-link" to="/catalog">
+              Применить
+            </Link>
           </aside>
 
           <div className="listing-grid">
@@ -364,16 +385,27 @@ export function HomePage() {
 
         <div className="card benefit-strip">
           <div>
-            <h3>Все этапы сделки в одном месте</h3>
+            <h3>
+              Все этапы сделки
+              <br />в одном месте
+            </h3>
             <p>От выбора авто до получения без цепочек посредников</p>
           </div>
           <div>
-            <h3>Безопасная оплата</h3>
+            <h3>
+              Безопасная
+              <br />
+              оплата
+            </h3>
             <p>Платеж привязан к условиям сделки и статусу исполнения</p>
           </div>
           <div>
-            <h3>Сравнение перевозчиков</h3>
-            <p>Выбор перевозчика, условий логистики и цены или заказов прямо из Китая</p>
+            <h3>
+              Сравнение
+              <br />
+              перевозчиков
+            </h3>
+            <p>Выбор перевозчика, условий логистики и цены или самовывоз прямо из Китая</p>
           </div>
         </div>
 
@@ -410,25 +442,8 @@ export function HomePage() {
             цена собирается заранее
           </h2>
         </div>
-        <div className="deal-tools-grid">
-          <article className="card deal-route-card">
-            <div className="deal-route-copy">
-              <span className="card-kicker">Маршрут сделки</span>
-              <h3>От китайского лота до понятного получения в РФ</h3>
-              <p>Каждый этап показывает, что уже проверено, где автомобиль сейчас и из чего складывается итоговая стоимость.</p>
-            </div>
-            <div className="deal-route-line" aria-label="Этапы сделки">
-              {dealRouteSteps.map(([number, title, description]) => (
-                <div className="deal-route-step" key={number}>
-                  <span>{number}</span>
-                  <strong>{title}</strong>
-                  <p>{description}</p>
-                </div>
-              ))}
-            </div>
-          </article>
-
-          <article className="card turnkey-calculator">
+        <div className="calculator-only-shell">
+          <article className="card turnkey-calculator turnkey-calculator-wide">
             <div className="calculator-heading">
               <span className="card-kicker">Умный калькулятор</span>
               <h3>Предварительный расчет под ключ</h3>
@@ -479,31 +494,43 @@ export function HomePage() {
                   onChange={(event) => updateCalculatorInput("year", Number(event.target.value))}
                 />
               </label>
-              <label>
-                Откуда едет
-                <select
-                  value={calculatorInput.origin}
-                  onChange={(event) => updateCalculatorInput("origin", event.target.value)}
-                >
-                  {Object.keys(logisticsByOrigin).map((origin) => (
-                    <option key={origin} value={origin}>
-                      {origin}
-                    </option>
-                  ))}
-                </select>
-              </label>
-              <label>
-                Пакет
-                <select
-                  value={calculatorInput.supportPackage}
-                  onChange={(event) => updateCalculatorInput("supportPackage", event.target.value as SupportPackage)}
-                >
-                  {Object.entries(supportPackages).map(([value, option]) => (
-                    <option key={value} value={value}>
-                      {option.label}
-                    </option>
-                  ))}
-                </select>
+              {calculatorInput.transportationNeeded && (
+                <>
+                  <label>
+                    Откуда едет
+                    <select
+                      value={calculatorInput.origin}
+                      onChange={(event) => updateCalculatorInput("origin", event.target.value)}
+                    >
+                      {Object.keys(logisticsByOrigin).map((origin) => (
+                        <option key={origin} value={origin}>
+                          {origin}
+                        </option>
+                      ))}
+                    </select>
+                  </label>
+                  <label>
+                    Куда едет
+                    <select
+                      value={calculatorInput.destination}
+                      onChange={(event) => updateCalculatorInput("destination", event.target.value)}
+                    >
+                      {Object.keys(logisticsByDestination).map((destination) => (
+                        <option key={destination} value={destination}>
+                          {destination}
+                        </option>
+                      ))}
+                    </select>
+                  </label>
+                </>
+              )}
+              <label className="transport-checkbox">
+                <input
+                  checked={!calculatorInput.transportationNeeded}
+                  type="checkbox"
+                  onChange={(event) => updateCalculatorInput("transportationNeeded", !event.target.checked)}
+                />
+                <span>Транспортировка не нужна</span>
               </label>
             </div>
 

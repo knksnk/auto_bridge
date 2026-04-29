@@ -5,6 +5,7 @@ import { useRevealOnScroll } from "./hooks/useRevealOnScroll";
 import { AdminPage } from "./pages/AdminPage";
 import { CabinetPage } from "./pages/CabinetPage";
 import { CatalogPage } from "./pages/CatalogPage";
+import { ChatsPage } from "./pages/ChatsPage";
 import { FavoritesPage } from "./pages/FavoritesPage";
 import { HomePage } from "./pages/HomePage";
 import { PartnerLandingPage } from "./pages/PartnerLandingPage";
@@ -38,6 +39,7 @@ export function App() {
           <Route index element={<HomePage />} />
           <Route path="/catalog" element={<CatalogPage />} />
           <Route path="/catalog/:slug" element={<ProductPage />} />
+          <Route path="/chats" element={<ChatsPage />} />
           <Route path="/favorites" element={<FavoritesPage />} />
           <Route path="/partners" element={<PartnersPage />} />
           <Route path="/seller" element={<PartnerLandingPage kind="seller" />} />

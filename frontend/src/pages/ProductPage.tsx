@@ -14,7 +14,7 @@ export function ProductPage() {
   const [isLoading, setLoading] = useState(true);
   const [lead, setLead] = useState<LeadPayload>({ name: "", phone: "", email: "", comment: "" });
   const [isSubmitting, setSubmitting] = useState(false);
-  const { toggleFavorite, isFavorite, toggleCompare, isCompared, showToast } = useMarketplace();
+  const { toggleFavorite, isFavorite, showToast } = useMarketplace();
 
   useEffect(() => {
     let active = true;
@@ -97,7 +97,6 @@ export function ProductPage() {
   }
 
   const favorite = isFavorite(car.id);
-  const compared = isCompared(car.id);
 
   return (
     <main className="product-page">
@@ -115,7 +114,7 @@ export function ProductPage() {
         </div>
         <aside className="product-price-panel">
           <span>Цена под ключ</span>
-          <strong>{car.turnkeyPrice.replace("Под ключ от ", "")}</strong>
+          <strong>{car.turnkeyPrice.replace("Под ключ ", "")}</strong>
           <p>{car.logisticsPrice}</p>
           <a href="#lead-form">Оставить заявку</a>
         </aside>
@@ -173,9 +172,9 @@ export function ProductPage() {
             <button type="button" onClick={() => toggleFavorite(car.id, car.title)}>
               {favorite ? "В избранном" : "Добавить в избранное"}
             </button>
-            <button type="button" className="secondary-product-action" onClick={() => toggleCompare(car.id, car.title)}>
-              {compared ? "В сравнении" : "Сравнить"}
-            </button>
+            <Link className="secondary-product-action" to={`/chats?car=${encodeURIComponent(car.id)}`}>
+              Чат с продавцом
+            </Link>
           </div>
 
           <form className="product-card product-lead-form reveal" id="lead-form" onSubmit={submitLead}>

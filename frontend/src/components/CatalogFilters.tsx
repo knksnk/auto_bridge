@@ -1,3 +1,4 @@
+import { catalogCars } from "../data/mockCars";
 import type { CatalogFilters as CatalogFiltersState } from "../types/catalog";
 
 interface CatalogFiltersProps {
@@ -14,6 +15,15 @@ const selectLabels: Record<SelectField, string> = {
   brand: "Марка",
   engine: "Двигатель",
   drive: "Привод",
+};
+
+const unique = (values: string[]) => Array.from(new Set(values.filter(Boolean))).sort((a, b) => a.localeCompare(b, "ru"));
+
+const selectOptions: Record<SelectField, string[]> = {
+  bodyType: unique(catalogCars.map((car) => car.body)),
+  brand: unique(catalogCars.map((car) => car.brand)),
+  engine: ["Бензин", "Гибрид", "Электро"],
+  drive: unique(catalogCars.map((car) => car.drive)),
 };
 
 export function CatalogFilters({ filters, onChange, onApply }: CatalogFiltersProps) {
@@ -38,13 +48,19 @@ export function CatalogFilters({ filters, onChange, onApply }: CatalogFiltersPro
         </div>
       </div>
       {selectFields.slice(0, 3).map((field) => (
-        <input
+        <select
           key={field}
           className="select-pill"
           value={filters[field]}
           onChange={(event) => update(field, event.target.value)}
-          placeholder={selectLabels[field]}
-        />
+        >
+          <option value="">{selectLabels[field]}</option>
+          {selectOptions[field].map((option) => (
+            <option key={option} value={option}>
+              {option}
+            </option>
+          ))}
+        </select>
       ))}
       <div className="filter-group filter-range filter-year">
         <label>Год</label>
@@ -53,12 +69,18 @@ export function CatalogFilters({ filters, onChange, onApply }: CatalogFiltersPro
           <input value={filters.yearTo} onChange={(event) => update("yearTo", event.target.value)} placeholder="до" />
         </div>
       </div>
-      <input
+      <select
         className="select-pill"
         value={filters.drive}
         onChange={(event) => update("drive", event.target.value)}
-        placeholder={selectLabels.drive}
-      />
+      >
+        <option value="">{selectLabels.drive}</option>
+        {selectOptions.drive.map((option) => (
+          <option key={option} value={option}>
+            {option}
+          </option>
+        ))}
+      </select>
       <button className="catalog-apply" type="button" onClick={onApply}>
         Применить
       </button>

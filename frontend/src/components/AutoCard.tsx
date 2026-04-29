@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useMarketplace } from "../state/MarketplaceState";
 import type { CarListing } from "../types/catalog";
 
@@ -18,19 +18,43 @@ const getRouteOrigin = (car: CarListing) => {
   return route.split("→")[0]?.trim() || route;
 };
 
+const formatCardPrice = (value: string, prefix: string) => {
+  const cleanValue = value.replace(prefix, "").replace(/^от\s+/i, "").trim();
+  return `от ${cleanValue}`;
+};
+
 export function AutoCard({ car, compact = false }: AutoCardProps) {
-  const { isFavorite, isCompared, toggleFavorite, toggleCompare } = useMarketplace();
+  const navigate = useNavigate();
+  const { isFavorite, toggleFavorite } = useMarketplace();
   const favorite = isFavorite(car.id);
-  const compared = isCompared(car.id);
+  const productUrl = `/catalog/${car.slug ?? car.id}`;
+
+  const openProduct = () => {
+    navigate(productUrl);
+  };
 
   return (
-    <article className={`auto-card catalog-auto-card ${compact ? "auto-card-compact" : ""}`.trim()}>
+    <article
+      className={`auto-card catalog-auto-card ${compact ? "auto-card-compact" : ""}`.trim()}
+      onClick={openProduct}
+      onKeyDown={(event) => {
+        if (event.key === "Enter" || event.key === " ") {
+          event.preventDefault();
+          openProduct();
+        }
+      }}
+      role="link"
+      tabIndex={0}
+    >
       <div className={coverClass[car.coverTone]}>
         <button
           className={`favorite-toggle ${favorite ? "is-active" : ""}`}
           type="button"
           aria-label={favorite ? "Убрать из избранного" : "Добавить в избранное"}
-          onClick={() => toggleFavorite(car.id, car.title)}
+          onClick={(event) => {
+            event.stopPropagation();
+            toggleFavorite(car.id, car.title);
+          }}
         >
           ♥
         </button>
@@ -62,25 +86,22 @@ export function AutoCard({ car, compact = false }: AutoCardProps) {
         <div className="auto-price-grid">
           <span>
             В Китае
-            <strong>{car.chinaPrice.replace("Цена в Китае от ", "")}</strong>
+            <strong>{formatCardPrice(car.chinaPrice, "Цена в Китае от ")}</strong>
           </span>
           <span>
             Под ключ
-            <strong>{car.turnkeyPrice.replace("Под ключ от ", "")}</strong>
+            <strong>{formatCardPrice(car.turnkeyPrice, "Под ключ от ")}</strong>
           </span>
         </div>
         <span className="turnkey-price">{car.logisticsPrice}</span>
         <div className="auto-actions">
-          <Link className="auto-primary-action" to={`/catalog/${car.slug ?? car.id}`}>
-            Смотреть
-          </Link>
-          <button
-            className={`auto-secondary-action ${compared ? "is-active" : ""}`}
-            type="button"
-            onClick={() => toggleCompare(car.id, car.title)}
+          <Link
+            className="auto-secondary-action auto-chat-action"
+            to={`/chats?car=${encodeURIComponent(car.id)}`}
+            onClick={(event) => event.stopPropagation()}
           >
-            {compared ? "В сравнении" : "Сравнить"}
-          </button>
+            Чат с продавцом
+          </Link>
         </div>
       </div>
     </article>
